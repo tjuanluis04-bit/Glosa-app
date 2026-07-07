@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Glosa — tema, término, definición</title>
+<title>Glosa</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2c4a6e">
 <link rel="icon" href="icon-192.png">
@@ -12,168 +12,266 @@
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,700;1,8..60,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#12151b;
-  --bg-2:#1a1e26;
-  --paper:#f4f0e6;
-  --paper-2:#ece5d2;
-  --ink:#201d18;
-  --ink-soft:#5c5546;
-  --rule:#d9d1ba;
-  --accent:#c98a2c;
-  --line:#2b3140;
-  --muted:#8b93a3;
-  --danger:#b6472f;
+  --bg:#12151b; --bg-2:#1a1e26; --paper:#faf8f2; --ink:#1c2029; --gridline:#1c2029;
+  --muted:#8b93a3; --accent:#c98a2c; --line:#2b3140; --danger:#b6472f; --star:#c9a02c; --ok:#3d7a5c;
 }
-*{box-sizing:border-box;}
-html,body{height:100%;margin:0;}
-body{
-  background:var(--bg);color:var(--paper);font-family:'Inter',sans-serif;
-  overflow:hidden;-webkit-tap-highlight-color:transparent;
-}
+*{box-sizing:border-box;} html,body{height:100%;margin:0;}
+body{background:var(--bg);color:var(--paper);font-family:'Inter',sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent;}
 .serif{font-family:'Source Serif 4',serif;}
-.mono{font-family:'IBM Plex Mono',monospace;}
 #app{height:100vh;display:flex;flex-direction:column;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px;}
+.view{display:none;flex:1;min-height:0;flex-direction:column;}
+.view.active{display:flex;}
 
-/* TOPBAR */
-.topbar{
-  display:flex;align-items:center;gap:8px;padding:10px 12px;
-  background:var(--bg-2);border-bottom:1px solid var(--line);flex-shrink:0;z-index:30;
-}
-.brand{font-family:'Source Serif 4';font-weight:700;font-style:italic;font-size:19px;color:var(--accent);}
-.temaSelectWrap{position:relative;flex:1;min-width:0;}
-#temaSelectBtn{
-  width:100%;background:var(--bg);border:1px solid var(--line);color:var(--paper);
-  padding:8px 10px;border-radius:8px;font-size:13px;text-align:left;cursor:pointer;
-  display:flex;align-items:center;gap:8px;font-family:'Inter';font-weight:600;
-}
-#temaSelectBtn .sw{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
-#temaSelectBtn .car{margin-left:auto;color:var(--muted);font-size:11px;}
-.temaMenu{
-  position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--bg-2);
-  border:1px solid var(--line);border-radius:10px;padding:6px;z-index:40;display:none;
-  max-height:60vh;overflow-y:auto;box-shadow:0 10px 30px rgba(0,0,0,0.5);
-}
-.temaMenu.show{display:block;}
-.temaMenuItem{
-  display:flex;align-items:center;gap:8px;padding:9px 8px;border-radius:7px;cursor:pointer;font-size:13.5px;
-}
-.temaMenuItem:hover,.temaMenuItem:active{background:var(--bg);}
-.temaMenuItem .sw{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
-.temaMenuItem .nm{flex:1;font-weight:600;}
-.temaMenuItem .del{color:var(--muted);font-size:14px;padding:2px 6px;}
-.temaMenuAdd{border-top:1px solid var(--line);margin-top:4px;padding-top:8px;}
-.iconbtn{
-  background:none;border:1px solid var(--line);color:var(--paper);width:34px;height:34px;
-  border-radius:8px;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
-}
+/* HOME */
+#view-home{overflow-y:auto;background:var(--bg);padding:20px 16px 40px;}
+.hometitle{font-family:'Source Serif 4';font-style:italic;font-weight:700;font-size:38px;color:var(--accent);margin:6px 0 4px;}
+.homesub{color:var(--muted);font-size:13px;margin-bottom:18px;}
+.sectionlabel{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin:22px 0 10px;}
+.temagrid{display:flex;flex-direction:column;gap:10px;}
+.temacard{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;border-left:6px solid var(--c,#2c4a6e);}
+.temacard .tn{font-family:'Source Serif 4';font-weight:700;font-size:18px;color:var(--paper);margin-bottom:6px;}
+.subchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.subchip{font-family:'IBM Plex Mono';font-size:10.5px;padding:3px 9px;border-radius:20px;background:rgba(255,255,255,0.08);color:var(--muted);}
+.subchip.none{font-style:italic;}
+.studybtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.studybtn{flex:1;background:rgba(255,255,255,0.06);border:1px solid var(--line);color:var(--paper);border-radius:9px;padding:8px 6px;font-size:12px;font-weight:600;text-align:center;cursor:pointer;}
+.studybtn:active{background:rgba(255,255,255,0.12);}
+.newtemabtn{margin-top:16px;width:100%;padding:14px;border-radius:12px;border:1px dashed var(--accent);background:none;color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;}
+
+/* TOPBAR (shared) */
+.topbar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg-2);border-bottom:1px solid var(--line);flex-shrink:0;z-index:30;}
+.iconbtn{background:none;border:1px solid var(--line);color:var(--paper);width:34px;height:34px;border-radius:8px;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
 .iconbtn:active{background:rgba(255,255,255,0.06);}
+.iconbtn.on{background:var(--accent);color:#1c1a17;border-color:var(--accent);}
+.tbtitle{font-family:'Source Serif 4';font-weight:700;font-style:italic;font-size:16px;color:var(--paper);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.searchrow{padding:8px 12px;background:var(--bg-2);border-bottom:1px solid var(--line);flex-shrink:0;}
+#searchInput{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--paper);padding:7px 10px;border-radius:8px;font-size:13px;}
 
-/* SEARCH */
-.searchrow{padding:8px 12px;background:var(--bg-2);border-bottom:1px solid var(--line);}
-#searchInput{
-  width:100%;background:var(--bg);border:1px solid var(--line);color:var(--paper);
-  padding:7px 10px;border-radius:8px;font-size:13px;font-family:'Inter';
-}
+/* TABLE VIEW */
+.mainarea{flex:1;overflow:auto;background:var(--paper);position:relative;}
+.colheader{position:sticky;top:0;left:0;z-index:5;display:flex;background:var(--paper);border-bottom:2px solid var(--gridline);margin-left:86px;height:40px;}
+.ch-star{width:42px;flex-shrink:0;border-right:1px solid var(--gridline);display:flex;align-items:center;justify-content:center;color:var(--star);font-size:15px;}
+.ch-term{width:110px;flex-shrink:0;border-right:1px solid var(--gridline);padding:0 8px;display:flex;align-items:center;font-weight:700;font-size:12px;color:var(--ink);text-transform:uppercase;letter-spacing:0.4px;}
+.ch-def{width:150px;flex-shrink:0;border-right:1px solid var(--gridline);padding:0 8px;display:flex;align-items:center;font-weight:700;font-size:12px;color:var(--ink);text-transform:uppercase;letter-spacing:0.4px;}
+.ch-ex{flex:1;min-width:100px;padding:0 8px;display:flex;align-items:center;font-weight:700;font-size:12px;color:var(--ink);text-transform:uppercase;letter-spacing:0.4px;}
 
-/* MAIN GRID */
-.main{flex:1;display:flex;min-height:0;background:var(--paper);}
-.spine{
-  width:64px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
-  position:relative;background:var(--spine, #2c4a6e);
-}
-.spine .stitle{
-  writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Source Serif 4';font-weight:600;
-  font-style:italic;font-size:17px;color:#f4f0e6;letter-spacing:0.5px;padding:16px 0;cursor:pointer;
-  max-height:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
-.spine .tabs-deco{
-  position:absolute;right:-3px;top:0;bottom:0;width:6px;
-  background:repeating-linear-gradient(to bottom, rgba(0,0,0,0.18) 0 6px, rgba(255,255,255,0.08) 6px 14px);
-}
-.rows-wrap{flex:1;min-width:0;overflow-y:auto;}
-.emptytema{padding:40px 20px;text-align:center;color:var(--ink-soft);font-size:14px;}
-.emptytema b{display:block;font-family:'Source Serif 4';font-size:19px;color:var(--ink);margin-bottom:6px;}
+.temablock{display:flex;min-height:100%;}
+.spine{width:46px;flex-shrink:0;position:relative;background:var(--c,#2c4a6e);display:flex;flex-direction:column;align-items:center;}
+.spinebtn{position:sticky;top:0;z-index:6;width:100%;aspect-ratio:1;background:var(--danger);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--paper);}
+.spine .stitle{writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Source Serif 4';font-weight:600;font-style:italic;font-size:14.5px;color:#f4f0e6;padding:14px 0;white-space:nowrap;cursor:pointer;flex:1;display:flex;align-items:center;}
+.subtemacol{display:flex;flex-direction:column;flex:1;min-width:0;position:relative;}
+.subtema-add-sticky{position:sticky;top:0;z-index:6;width:40px;height:40px;background:var(--accent);color:#1c1a17;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--paper);}
+.subtemablock{display:flex;}
+.subspine{width:40px;flex-shrink:0;background:var(--c,#5c4a2c);display:flex;flex-direction:column;align-items:center;}
+.subspine .stitle{writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Inter';font-weight:700;font-size:11.5px;color:#f4f0e6;padding:10px 0;white-space:nowrap;cursor:pointer;flex:1;display:flex;align-items:center;}
+.termcol{flex:1;min-width:0;}
 
-.row{
-  display:flex;border-bottom:1px dashed var(--rule);cursor:pointer;
-}
-.row.expanded{cursor:default;background:rgba(201,138,44,0.05);}
-.term-cell{
-  width:34%;min-width:110px;flex-shrink:0;padding:12px 12px;border-right:1px solid var(--rule);
-  display:flex;align-items:center;
-}
-.term-input{
-  width:100%;background:none;border:none;color:var(--ink);font-family:'Source Serif 4';font-weight:600;
-  font-size:14.5px;pointer-events:none;
-}
-.row.expanded .term-input{pointer-events:auto;font-size:17px;}
+.row{display:flex;cursor:pointer;background:var(--rowbg,var(--paper));color:var(--rowtext,var(--ink));border-bottom:1px solid var(--gridline);}
+.row.expanded{cursor:default;}
+.star-cell{width:42px;flex-shrink:0;border-right:1px solid var(--gridline);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:9px 0;gap:6px;}
+.rowbtn{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:2px;line-height:1;}
+.rowbtn.star{font-size:16px;color:#c8c2b0;}
+.rowbtn.star.fav{color:var(--star);}
+.rowextra{display:none;flex-direction:column;gap:6px;}
+.row.expanded .rowextra{display:flex;}
+.term-cell{width:110px;flex-shrink:0;border-right:1px solid var(--gridline);padding:9px 8px;}
+.term-input{width:100%;background:none;border:none;color:inherit;font-family:'Source Serif 4';font-weight:600;font-size:13px;pointer-events:none;}
+.row.expanded .term-input{pointer-events:auto;font-size:15.5px;}
 .term-input:focus{outline:none;}
-.def-cell{flex:1;min-width:0;padding:12px 14px;position:relative;}
-.def-preview{
-  font-size:12.5px;color:var(--ink-soft);line-height:1.5;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+.def-cell{width:150px;flex-shrink:0;border-right:1px solid var(--gridline);padding:9px 8px;}
+.ex-cell{flex:1;min-width:100px;padding:9px 8px;}
+.def-preview,.ex-preview{font-size:11.5px;opacity:0.85;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.ex-preview{font-style:italic;}
+.row.expanded .def-preview,.row.expanded .ex-preview{display:none;}
+.def-edit,.ex-edit{display:none;width:100%;background:none;border:none;color:inherit;font-family:'Inter';font-size:14px;line-height:1.6;resize:none;min-height:60px;}
+.ex-edit{font-style:italic;}
+.def-edit:focus,.ex-edit:focus{outline:none;}
+.row.expanded .def-edit,.row.expanded .ex-edit{display:block;}
+.addrow{padding:12px;text-align:center;color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer;border-bottom:1px solid var(--gridline);background:var(--paper);}
+.emptytable{padding:50px 20px;text-align:center;color:var(--muted);background:var(--paper);}
+.emptytable b{display:block;font-family:'Source Serif 4';font-size:19px;color:var(--ink);margin-bottom:6px;}
+
+/* FLASHCARDS */
+#view-flash .mainarea{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);padding:20px;}
+.flashwrap{width:100%;max-width:340px;}
+.flashcounter{text-align:center;color:var(--muted);font-size:12px;margin-bottom:10px;font-family:'IBM Plex Mono';}
+.flashcard{
+  background:var(--paper);color:var(--ink);border-radius:16px;min-height:260px;padding:26px 22px;
+  display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;
+  box-shadow:0 12px 30px rgba(0,0,0,0.4);position:relative;
 }
-.row.expanded .def-preview{display:none;}
-.def-edit{display:none;width:100%;background:none;border:none;color:var(--ink);font-family:'Inter';
-  font-size:15.5px;line-height:1.6;resize:none;min-height:70px;}
-.def-edit:focus{outline:none;}
-.row.expanded .def-edit{display:block;}
-.rowactions{display:flex;align-items:flex-start;padding:10px 8px 0 0;gap:4px;}
-.rowbtn{background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:4px;}
-.rowbtn:active{color:var(--danger);}
-.addrow{
-  padding:14px;text-align:center;color:var(--ink-soft);font-size:13px;font-weight:600;
-  cursor:pointer;border-bottom:1px solid transparent;
+.flashcard .fc-label{position:absolute;top:12px;left:16px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;}
+.flashcard .fc-term{font-family:'Source Serif 4';font-weight:700;font-size:26px;}
+.flashcard .fc-back{display:none;}
+.flashcard.flipped .fc-front{display:none;}
+.flashcard.flipped .fc-back{display:block;}
+.fc-def{font-size:16px;line-height:1.6;margin-bottom:10px;}
+.fc-ex{font-size:13px;font-style:italic;color:var(--ink-soft,#5c5546);}
+.flashnav{display:flex;gap:10px;justify-content:center;margin-top:16px;}
+.flashnav .btn{min-width:80px;}
+.flashhint{text-align:center;color:var(--muted);font-size:11.5px;margin-top:10px;}
+
+/* MEMORAMA */
+#view-memo .mainarea{background:var(--bg);padding:16px;overflow-y:auto;}
+.memogrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:420px;margin:0 auto;}
+.memocard{
+  background:var(--bg-2);border:1px solid var(--line);border-radius:10px;min-height:84px;
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;cursor:pointer;font-size:12.5px;
 }
-.addrow:active{background:var(--paper-2);}
+.memocard .back-face{font-size:20px;color:var(--muted);}
+.memocard.flipped{background:var(--paper);color:var(--ink);border-color:var(--accent);font-weight:600;}
+.memocard.matched{background:var(--ok);color:#fff;border-color:var(--ok);opacity:0.85;cursor:default;}
+.memostatus{text-align:center;color:var(--muted);font-size:12.5px;margin:12px 0;}
+.memowin{text-align:center;padding:20px;color:var(--accent);font-family:'Source Serif 4';font-style:italic;font-size:20px;}
+
+/* QUIZ */
+#view-quiz .mainarea{background:var(--bg);padding:20px 16px;display:flex;flex-direction:column;align-items:center;}
+.quizwrap{width:100%;max-width:380px;}
+.quizcounter{text-align:center;color:var(--muted);font-size:12px;margin-bottom:12px;font-family:'IBM Plex Mono';}
+.quizq{background:var(--paper);color:var(--ink);border-radius:14px;padding:20px 18px;text-align:center;margin-bottom:16px;box-shadow:0 10px 26px rgba(0,0,0,0.35);}
+.quizq .ql{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:6px;}
+.quizq .qt{font-family:'Source Serif 4';font-weight:700;font-size:22px;}
+.quizopt{background:var(--bg-2);border:1px solid var(--line);color:var(--paper);border-radius:10px;padding:12px 14px;margin-bottom:9px;font-size:13.5px;cursor:pointer;line-height:1.4;}
+.quizopt.correct{background:var(--ok);border-color:var(--ok);color:#fff;font-weight:600;}
+.quizopt.wrong{background:var(--danger);border-color:var(--danger);color:#fff;}
+.quizopt.disabled{cursor:default;}
+.quiznext{width:100%;margin-top:6px;}
+.quizend{text-align:center;}
+.quizend .score{font-family:'Source Serif 4';font-style:italic;font-size:30px;color:var(--accent);margin:10px 0;}
+.quizmissed{background:var(--bg-2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:14px 0;text-align:left;}
+.quizmissed .qm-t{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+.quizmissed .qm-item{font-size:13px;padding:5px 0;border-bottom:1px solid var(--line);}
+.quizmissed .qm-item:last-child{border-bottom:none;}
+.quizend .row2{justify-content:center;flex-wrap:wrap;}
 
 /* MODALS */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;z-index:100;}
 .modal-bg.show{display:flex;}
-.modal{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:18px;width:min(340px,88vw);}
+.modal{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:18px;width:min(360px,90vw);max-height:85vh;overflow-y:auto;}
 .modal h3{margin:0 0 10px;font-family:'Source Serif 4';color:var(--accent);font-style:italic;}
-.modal p{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 14px;}
-.modal input[type=text]{
-  width:100%;background:var(--bg);border:1px solid var(--line);color:var(--paper);
-  padding:9px 10px;border-radius:8px;font-size:14px;margin-bottom:12px;font-family:'Inter';
-}
-.swatches{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
-.swatch{width:26px;height:26px;border-radius:7px;cursor:pointer;border:2px solid transparent;}
-.swatch.sel{border-color:var(--paper);}
+.modal p{font-size:12.5px;color:var(--muted);line-height:1.5;margin:0 0 12px;}
+.modal input[type=text]{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--paper);padding:9px 10px;border-radius:8px;font-size:14px;margin-bottom:12px;}
 .row2{display:flex;gap:8px;justify-content:flex-end;}
 .btn{padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:none;color:var(--paper);font-size:13px;cursor:pointer;font-weight:600;}
 .btn.primary{background:var(--accent);color:#1c1a17;border-color:var(--accent);}
 .btn.danger{background:var(--danger);color:#fff;border-color:var(--danger);}
-::-webkit-scrollbar{width:8px;} ::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px;}
+.colorlabel{font-size:11.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:10px 0 6px;}
+.familyrow{display:flex;gap:5px;margin-bottom:5px;}
+.swatch{width:28px;height:28px;border-radius:6px;cursor:pointer;border:2px solid transparent;flex-shrink:0;}
+.swatch.sel{border-color:var(--paper);box-shadow:0 0 0 1px var(--accent);}
+.texpicker{display:flex;flex-wrap:wrap;gap:8px;}
+.texswatch{width:64px;cursor:pointer;border:2px solid var(--line);border-radius:7px;flex-shrink:0;overflow:hidden;}
+.texswatch.sel{border-color:var(--accent);}
+.texswatch .tp{height:34px;background-color:#3a3f4c;}
+.texswatch .tl{text-align:center;font-size:8.5px;color:var(--muted);padding:3px 2px;background:var(--bg);}
 </style>
 </head>
 <body>
 <div id="app">
-  <div class="topbar">
-    <div class="brand">Glosa</div>
-    <div class="temaSelectWrap">
-      <button id="temaSelectBtn"><span class="sw" id="curSw"></span><span id="curName">Sin temas</span><span class="car">▾</span></button>
-      <div class="temaMenu" id="temaMenu"></div>
-    </div>
-    <button class="iconbtn" id="dataBtn" title="Datos">⋮</button>
+  <div id="view-home" class="view active">
+    <div class="hometitle">Glosa</div>
+    <div class="homesub">Organización de Términos para el estudio</div>
+    <div class="temagrid" id="temaGrid"></div>
+    <button class="newtemabtn" id="newTemaBtn">+ Nuevo tema</button>
+    <div class="sectionlabel">Aprendizaje</div>
+    <div style="color:var(--muted);font-size:12.5px;">🃏 Tarjetas para repasar, 🧠 Memorama para jugar, ❓ Quiz para detectar qué términos aún no dominas — al final te deja repasar solo esos.</div>
   </div>
-  <div class="searchrow"><input id="searchInput" placeholder="Buscar término..."></div>
-  <div class="main">
-    <div class="spine" id="spine"><div class="tabs-deco"></div><div class="stitle" id="spineTitle">—</div></div>
-    <div class="rows-wrap" id="rowsWrap"></div>
+
+  <div id="view-table" class="view">
+    <div class="topbar">
+      <button class="iconbtn" data-back="home">←</button>
+      <div class="tbtitle" id="tbTitle">Tema</div>
+      <button class="iconbtn" id="favToggle" title="Solo favoritos">★</button>
+      <button class="iconbtn" id="dataBtn">⋮</button>
+    </div>
+    <div class="searchrow"><input id="searchInput" placeholder="Buscar término..."></div>
+    <div class="mainarea" id="mainArea"></div>
+  </div>
+
+  <div id="view-flash" class="view">
+    <div class="topbar">
+      <button class="iconbtn" data-back="home">←</button>
+      <div class="tbtitle" id="flashTitle">Tarjetas</div>
+    </div>
+    <div class="mainarea">
+      <div class="flashwrap">
+        <div class="flashcounter" id="flashCounter">1/1</div>
+        <div class="flashcard" id="flashCard">
+          <div class="fc-label">Término</div>
+          <div class="fc-front"><div class="fc-term" id="fcTerm"></div></div>
+          <div class="fc-back">
+            <div class="fc-def" id="fcDef"></div>
+            <div class="fc-ex" id="fcEx"></div>
+          </div>
+        </div>
+        <div class="flashhint">Toca la tarjeta para voltearla</div>
+        <div class="flashnav">
+          <button class="btn" id="flashPrev">◀ Anterior</button>
+          <button class="btn primary" id="flashShuffle">🔀 Mezclar</button>
+          <button class="btn" id="flashNext">Siguiente ▶</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-memo" class="view">
+    <div class="topbar">
+      <button class="iconbtn" data-back="home">←</button>
+      <div class="tbtitle" id="memoTitle">Memorama</div>
+      <button class="iconbtn" id="memoRestart">🔄</button>
+    </div>
+    <div class="mainarea">
+      <div class="memostatus" id="memoStatus"></div>
+      <div class="memogrid" id="memoGrid"></div>
+    </div>
+  </div>
+
+  <div id="view-quiz" class="view">
+    <div class="topbar">
+      <button class="iconbtn" data-back="home">←</button>
+      <div class="tbtitle" id="quizTitle">Quiz</div>
+    </div>
+    <div class="mainarea" id="quizArea"></div>
   </div>
 </div>
 
 <div class="modal-bg" id="temaModal">
   <div class="modal">
     <h3 id="temaModalTitle">Nuevo tema</h3>
-    <input type="text" id="temaNameInput" placeholder="Nombre del tema (ej. Biología celular)">
-    <p>Color del lomo</p>
-    <div class="swatches" id="swatches"></div>
-    <div class="row2">
+    <input type="text" id="temaNameInput" placeholder="Nombre del tema">
+    <div class="colorlabel">Color de fondo</div><div id="temaSwBg"></div>
+    <div class="colorlabel">Color del texto</div><div id="temaSwText"></div>
+    <div class="colorlabel">Textura</div><div id="temaTexPicker" class="texpicker"></div>
+    <div class="row2" style="margin-top:14px;">
       <button class="btn" id="temaCancel">Cancelar</button>
+      <button class="btn danger" id="temaDeleteBtn" style="display:none;">Eliminar</button>
       <button class="btn primary" id="temaSave">Guardar</button>
     </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="subtemaModal">
+  <div class="modal">
+    <h3 id="subtemaModalTitle">Nuevo subtema</h3>
+    <input type="text" id="subtemaNameInput" placeholder="Nombre del subtema">
+    <div class="colorlabel">Color de fondo</div><div id="subtemaSwBg"></div>
+    <div class="colorlabel">Color del texto</div><div id="subtemaSwText"></div>
+    <div class="colorlabel">Textura</div><div id="subtemaTexPicker" class="texpicker"></div>
+    <div class="row2" style="margin-top:14px;">
+      <button class="btn" id="subtemaCancel">Cancelar</button>
+      <button class="btn danger" id="subtemaDeleteBtn" style="display:none;">Eliminar</button>
+      <button class="btn primary" id="subtemaSave">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="rowColorModal">
+  <div class="modal">
+    <h3>Color de la fila</h3>
+    <div class="colorlabel">Color de fondo</div><div id="rowSwBg"></div>
+    <div class="colorlabel">Color del texto</div><div id="rowSwText"></div>
+    <div class="row2" style="margin-top:14px;"><button class="btn" id="rowColorClose">Listo</button></div>
   </div>
 </div>
 
@@ -191,128 +289,437 @@ body{
 <div class="modal-bg" id="dataModal">
   <div class="modal">
     <h3>Datos</h3>
-    <p>Todo se guarda en este dispositivo, sin conexión a internet. Puedes exportar una copia de seguridad o importarla en otro equipo.</p>
-    <div class="row2" style="justify-content:space-between;">
-      <button class="btn" id="importBtn">Importar</button>
-      <button class="btn primary" id="exportBtn">Exportar</button>
-    </div>
+    <p>Vista previa de diseño. Los datos se guardan solo en esta sesión de prueba.</p>
+    <div class="row2"><button class="btn primary" id="dataClose">Cerrar</button></div>
   </div>
-  <input type="file" id="fileInput" accept="application/json" style="display:none;">
 </div>
 
 <script>
-const PALETTE = ['#2c4a6e','#5c4a2c','#3d5c3a','#6e2c4a','#2c5c5c','#6e4a2c','#4a2c6e','#4a5c2c'];
 const uid = () => Math.random().toString(36).slice(2,10)+Date.now().toString(36);
-
-let data = {temas:[], currentId:null};
+const FAMILIES = [
+  {name:'Gris',    s:['#f4f1e8','#d8d2c0','#8b8577','#4a463c']},
+  {name:'Rojo',    s:['#f6d9d2','#e08a6e','#b6472f','#7a2416']},
+  {name:'Naranja', s:['#fbe3c2','#e8a34a','#c98a2c','#8a5a12']},
+  {name:'Amarillo',s:['#faf0c0','#e8d366','#c9b02c','#8a7712']},
+  {name:'Verde',   s:['#d9ead9','#7fb56f','#3d5c3a','#254022']},
+  {name:'Azul',    s:['#d3e0ee','#6e93bb','#2c4a6e','#1a2f47']},
+  {name:'Morado',  s:['#e2d3ee','#a86ebb','#6e2c4a','#471a30']},
+];
+const TEXTURES = {
+  liso: {label:'Liso', image:'none', size:'auto'},
+  diagonal: {label:'Diagonal', image:'repeating-linear-gradient(135deg, rgba(255,255,255,0.16) 0 6px, transparent 6px 14px)', size:'auto'},
+  puntos: {label:'Puntos', image:'radial-gradient(rgba(255,255,255,0.35) 1.6px, transparent 1.8px)', size:'11px 11px'},
+  rejilla: {label:'Rejilla', image:'linear-gradient(rgba(255,255,255,0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.22) 1px, transparent 1px)', size:'11px 11px'},
+  cuadros: {label:'Cuadros', image:'linear-gradient(45deg, rgba(255,255,255,0.14) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.14) 75%), linear-gradient(45deg, rgba(255,255,255,0.14) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.14) 75%)', size:'16px 16px', pos:'0 0, 8px 8px'},
+  ondas: {label:'Ondas', image:'repeating-radial-gradient(circle at 50% 0%, rgba(255,255,255,0.22) 0 3px, transparent 4px 12px)', size:'18px 14px'},
+  espiga: {label:'Espiga', image:'repeating-linear-gradient(45deg, rgba(255,255,255,0.18) 0 4px, transparent 4px 8px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.18) 0 4px, transparent 4px 8px)', size:'12px 12px'},
+};
+function textureCSS(id, baseColor){
+  const t = TEXTURES[id] || TEXTURES.diagonal;
+  let s = `background-color:${baseColor};`;
+  if(t.image!=='none'){ s += `background-image:${t.image};background-size:${t.size};`; if(t.pos) s += `background-position:${t.pos};`; }
+  return s;
+}
+let data = {temas:[]};
+let currentTemaId = null;
 let searchQuery = '';
-let pendingDelete = null; // {type:'tema'|'term', id, temaId}
+let favOnly = false;
+let expandedId = null;
+let pendingDelete = null;
 
-function load(){
-  try{
-    const raw = localStorage.getItem('glosa-data');
-    if(raw){ data = JSON.parse(raw); return; }
-  }catch(e){}
-  seed();
-}
-function save(){
-  try{ localStorage.setItem('glosa-data', JSON.stringify(data)); }
-  catch(e){ console.error('No se pudo guardar localmente', e); }
-}
 function seed(){
-  const t1 = {id:uid(), title:'Términos de estudio', color:PALETTE[0], terms:[
-    {id:uid(), term:'Tema', definition:'La celda grande y vertical de la izquierda. Toca su nombre para cambiarlo.'},
-    {id:uid(), term:'Término', definition:'Cada fila pequeña de la columna central. Empieza compacta.'},
-    {id:uid(), term:'Definición', definition:'Toca cualquier fila para expandirla y ver o editar el texto completo, sin mover las demás filas ni afectar otras columnas.'}
+  const t = {id:uid(), title:'Términos de estudio', color:'#6e2c4a', textColor:'#f4f0e6', texture:'diagonal', subtemas:[
+    {id:uid(), title:'Conceptos base', color:'#8a5a12', textColor:'#f4f0e6', texture:'puntos', terminos:[
+      {id:uid(), term:'Tema', definition:'El nivel más general, puede tener varios subtemas.', example:'Ej: Biología', favorite:true, color:'', textColor:''},
+      {id:uid(), term:'Subtema', definition:'Agrupa términos relacionados dentro de un tema.', example:'Ej: Células', favorite:false, color:'', textColor:''},
+      {id:uid(), term:'Favorito', definition:'Toca la estrella para marcarlo y luego filtrar.', example:'', favorite:false, color:'', textColor:''},
+    ]}
   ]};
-  data = {temas:[t1], currentId:t1.id};
+  data.temas = [t]; currentTemaId = null;
+}
+function escapeHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function findTema(id){ return data.temas.find(t=>t.id===id); }
+function findSubtema(tema,id){ return tema.subtemas.find(s=>s.id===id); }
+function temaTerms(t){ return t.subtemas.flatMap(s=>s.terminos).filter(x=>x.term.trim()); }
+
+/* NAV */
+document.querySelectorAll('[data-back]').forEach(b=> b.addEventListener('click', ()=> showView('home')));
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  if(name==='home') renderHome();
 }
 
-function currentTema(){ return data.temas.find(t=>t.id===data.currentId); }
-
-// ---------- TEMA SELECT ----------
-function renderTemaSelect(){
-  const t = currentTema();
-  document.getElementById('curName').textContent = t ? t.title : 'Sin temas';
-  document.getElementById('curSw').style.background = t ? t.color : '#555';
-  document.getElementById('spine').style.setProperty('--spine', t ? t.color : '#333');
-  document.getElementById('spine').style.background = t ? t.color : '#333';
-  document.getElementById('spineTitle').textContent = t ? t.title : 'Crea un tema';
-
-  const menu = document.getElementById('temaMenu');
-  menu.innerHTML = data.temas.map(x=>`
-    <div class="temaMenuItem" data-id="${x.id}">
-      <span class="sw" style="background:${x.color}"></span>
-      <span class="nm">${escapeHtml(x.title)}</span>
-      <span class="del" data-del="${x.id}">🗑</span>
-    </div>`).join('') + `<div class="temaMenuAdd"><div class="temaMenuItem" id="addTemaItem"><span style="opacity:0.8;">+ Nuevo tema</span></div></div>`;
-
-  menu.querySelectorAll('.temaMenuItem[data-id]').forEach(el=>{
-    el.addEventListener('click', ev=>{
-      if(ev.target.dataset.del){ return; }
-      data.currentId = el.dataset.id; save(); closeTemaMenu(); renderAll();
-    });
-  });
-  menu.querySelectorAll('.del').forEach(el=>{
-    el.addEventListener('click', ev=>{
-      ev.stopPropagation();
-      openConfirm('tema', el.dataset.del, 'Eliminar tema', 'Se eliminarán también todos sus términos y definiciones.');
-    });
-  });
-  document.getElementById('addTemaItem').addEventListener('click', ()=>{
-    closeTemaMenu(); openTemaModal(null);
-  });
+/* HOME */
+function renderHome(){
+  const grid = document.getElementById('temaGrid');
+  if(data.temas.length===0){ grid.innerHTML = `<div style="color:var(--muted);font-size:13px;">Crea tu primer tema para empezar.</div>`; return; }
+  grid.innerHTML = data.temas.map(t=>`
+    <div class="temacard" style="--c:${t.color}" data-id="${t.id}">
+      <div class="tn">${escapeHtml(t.title)}</div>
+      <div class="subchips">${t.subtemas.length ? t.subtemas.map(s=>`<span class="subchip">${escapeHtml(s.title)}</span>`).join('') : '<span class="subchip none">sin subtemas</span>'}</div>
+      <div class="studybtns">
+        <div class="studybtn" data-open="${t.id}">📖 Ver tabla</div>
+        <div class="studybtn" data-flash="${t.id}">🃏 Tarjetas</div>
+        <div class="studybtn" data-memo="${t.id}">🧠 Memorama</div>
+        <div class="studybtn" data-quiz="${t.id}">❓ Quiz</div>
+      </div>
+    </div>`).join('');
+  grid.querySelectorAll('[data-open]').forEach(el=> el.addEventListener('click', ev=>{ ev.stopPropagation(); currentTemaId=el.dataset.open; showView('table'); renderTable(); }));
+  grid.querySelectorAll('[data-flash]').forEach(el=> el.addEventListener('click', ev=>{ ev.stopPropagation(); startFlash(el.dataset.flash); }));
+  grid.querySelectorAll('[data-memo]').forEach(el=> el.addEventListener('click', ev=>{ ev.stopPropagation(); startMemo(el.dataset.memo); }));
+  grid.querySelectorAll('[data-quiz]').forEach(el=> el.addEventListener('click', ev=>{ ev.stopPropagation(); startQuiz(el.dataset.quiz); }));
+  grid.querySelectorAll('.temacard').forEach(el=> el.addEventListener('click', ()=>{ currentTemaId=el.dataset.id; showView('table'); renderTable(); }));
 }
-function openTemaMenu(){ document.getElementById('temaMenu').classList.add('show'); }
-function closeTemaMenu(){ document.getElementById('temaMenu').classList.remove('show'); }
-document.getElementById('temaSelectBtn').addEventListener('click', ()=>{
-  const m = document.getElementById('temaMenu');
-  m.classList.contains('show') ? closeTemaMenu() : openTemaMenu();
-});
-document.addEventListener('click', ev=>{
-  if(!ev.target.closest('.temaSelectWrap')) closeTemaMenu();
-});
-document.getElementById('spineTitle').addEventListener('click', ()=>{
-  const t = currentTema(); if(t) openTemaModal(t.id);
+document.getElementById('newTemaBtn').addEventListener('click', ()=> openTemaModal(null));
+
+/* ---------- FLASHCARDS ---------- */
+let flashDeck = [], flashIdx = 0, flashFlipped = false;
+function startFlash(temaId){
+  const t = findTema(temaId);
+  flashDeck = temaTerms(t);
+  if(flashDeck.length===0){ alert('Este tema todavía no tiene términos.'); return; }
+  flashIdx = 0; flashFlipped = false;
+  document.getElementById('flashTitle').textContent = 'Tarjetas · '+t.title;
+  showView('flash'); renderFlash();
+}
+function renderFlash(){
+  const term = flashDeck[flashIdx];
+  document.getElementById('flashCounter').textContent = (flashIdx+1)+'/'+flashDeck.length;
+  document.getElementById('fcTerm').textContent = term.term;
+  document.getElementById('fcDef').textContent = term.definition || 'Sin definición todavía.';
+  document.getElementById('fcEx').textContent = term.example ? 'Ej: '+term.example : '';
+  document.getElementById('flashCard').classList.toggle('flipped', flashFlipped);
+}
+document.getElementById('flashCard').addEventListener('click', ()=>{ flashFlipped=!flashFlipped; renderFlash(); });
+document.getElementById('flashPrev').addEventListener('click', ()=>{ flashIdx=(flashIdx-1+flashDeck.length)%flashDeck.length; flashFlipped=false; renderFlash(); });
+document.getElementById('flashNext').addEventListener('click', ()=>{ flashIdx=(flashIdx+1)%flashDeck.length; flashFlipped=false; renderFlash(); });
+document.getElementById('flashShuffle').addEventListener('click', ()=>{
+  for(let i=flashDeck.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [flashDeck[i],flashDeck[j]]=[flashDeck[j],flashDeck[i]]; }
+  flashIdx=0; flashFlipped=false; renderFlash();
 });
 
-// ---------- TEMA MODAL ----------
-let editingTemaId = null;
-let selectedColor = PALETTE[0];
-function openTemaModal(temaId){
-  editingTemaId = temaId;
-  const t = temaId ? data.temas.find(x=>x.id===temaId) : null;
-  document.getElementById('temaModalTitle').textContent = t ? 'Editar tema' : 'Nuevo tema';
-  document.getElementById('temaNameInput').value = t ? t.title : '';
-  selectedColor = t ? t.color : PALETTE[data.temas.length % PALETTE.length];
-  const sw = document.getElementById('swatches');
-  sw.innerHTML = PALETTE.map(c=>`<div class="swatch ${c===selectedColor?'sel':''}" style="background:${c}" data-c="${c}"></div>`).join('');
-  sw.querySelectorAll('.swatch').forEach(el=>{
-    el.addEventListener('click', ()=>{
-      selectedColor = el.dataset.c;
-      sw.querySelectorAll('.swatch').forEach(s=>s.classList.remove('sel'));
-      el.classList.add('sel');
-    });
-  });
-  document.getElementById('temaModal').classList.add('show');
-  setTimeout(()=>document.getElementById('temaNameInput').focus(), 50);
+/* ---------- MEMORAMA ---------- */
+let memoCards = [], memoFlipped = [], memoMatched = new Set(), memoLock = false, memoTemaTitle='';
+function startMemo(temaId){
+  const t = findTema(temaId);
+  const terms = temaTerms(t).slice(0,6);
+  if(terms.length<2){ alert('Este tema necesita al menos 2 términos con definición.'); return; }
+  memoTemaTitle = t.title;
+  document.getElementById('memoTitle').textContent = 'Memorama · '+t.title;
+  buildMemoDeck(terms);
+  showView('memo'); renderMemo();
 }
-document.getElementById('temaCancel').addEventListener('click', ()=> document.getElementById('temaModal').classList.remove('show'));
-document.getElementById('temaSave').addEventListener('click', ()=>{
-  const name = document.getElementById('temaNameInput').value.trim() || 'Sin título';
-  if(editingTemaId){
-    const t = data.temas.find(x=>x.id===editingTemaId);
-    t.title = name; t.color = selectedColor;
-  } else {
-    const t = {id:uid(), title:name, color:selectedColor, terms:[]};
-    data.temas.push(t); data.currentId = t.id;
+function buildMemoDeck(terms){
+  const cards = [];
+  terms.forEach(x=>{
+    cards.push({key:x.id, side:'term', text:x.term});
+    cards.push({key:x.id, side:'def', text:x.definition || '(sin definición)'});
+  });
+  for(let i=cards.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [cards[i],cards[j]]=[cards[j],cards[i]]; }
+  memoCards = cards; memoFlipped=[]; memoMatched=new Set(); memoLock=false;
+}
+function renderMemo(){
+  const grid = document.getElementById('memoGrid');
+  const done = memoMatched.size === memoCards.length;
+  document.getElementById('memoStatus').textContent = done ? '' : `Pares encontrados: ${memoMatched.size/2} / ${memoCards.length/2}`;
+  if(done){
+    grid.innerHTML = '';
+    document.getElementById('memoStatus').innerHTML = `<div class="memowin">🎉 ¡Completado! · ${memoTemaTitle}</div>`;
+    return;
   }
-  save(); document.getElementById('temaModal').classList.remove('show'); renderAll();
+  grid.innerHTML = memoCards.map((c,i)=>{
+    const flipped = memoFlipped.includes(i) || memoMatched.has(i);
+    const matched = memoMatched.has(i);
+    return `<div class="memocard ${flipped?'flipped':''} ${matched?'matched':''}" data-i="${i}">
+      ${flipped ? escapeHtml(c.text) : '<span class="back-face">?</span>'}
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('.memocard').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const i = parseInt(el.dataset.i);
+      if(memoLock || memoFlipped.includes(i) || memoMatched.has(i)) return;
+      memoFlipped.push(i);
+      renderMemo();
+      if(memoFlipped.length===2){
+        memoLock = true;
+        const [a,b] = memoFlipped;
+        if(memoCards[a].key === memoCards[b].key){
+          memoMatched.add(a); memoMatched.add(b);
+          memoFlipped = []; memoLock = false; renderMemo();
+        } else {
+          setTimeout(()=>{ memoFlipped=[]; memoLock=false; renderMemo(); }, 750);
+        }
+      }
+    });
+  });
+}
+document.getElementById('memoRestart').addEventListener('click', ()=>{
+  const terms = temaTerms(findTema(currentMemoTemaId())).slice(0,6);
+  buildMemoDeck(terms); renderMemo();
 });
+function currentMemoTemaId(){ return data.temas.find(t=>t.title===memoTemaTitle)?.id; }
 
-// ---------- CONFIRM MODAL ----------
-function openConfirm(type,id,title,text){
-  pendingDelete = {type,id};
+/* ---------- QUIZ ---------- */
+let quizDeck = [], quizPool = [], quizIdx = 0, quizScore = 0, quizMissed = [], quizAnswered = false, quizTemaId = null;
+function startQuiz(temaId, onlyThese){
+  const t = findTema(temaId);
+  quizTemaId = temaId;
+  quizPool = temaTerms(t).filter(x=>x.definition && x.definition.trim());
+  if(quizPool.length < 2){ alert('Necesitas al menos 2 términos con definición en este tema.'); return; }
+  quizDeck = onlyThese ? onlyThese.slice() : quizPool.slice();
+  shuffleArr(quizDeck);
+  quizIdx = 0; quizScore = 0; quizMissed = [];
+  document.getElementById('quizTitle').textContent = 'Quiz · '+t.title;
+  showView('quiz'); renderQuiz();
+}
+function shuffleArr(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+function renderQuiz(){
+  const area = document.getElementById('quizArea');
+  if(quizIdx >= quizDeck.length){ renderQuizEnd(); return; }
+  const q = quizDeck[quizIdx];
+  let distractors = quizPool.filter(x=>x.id!==q.id);
+  shuffleArr(distractors);
+  distractors = distractors.slice(0,3);
+  let options = shuffleArr([q, ...distractors]);
+  quizAnswered = false;
+  area.innerHTML = `<div class="quizwrap">
+    <div class="quizcounter">Pregunta ${quizIdx+1}/${quizDeck.length} · Aciertos: ${quizScore}</div>
+    <div class="quizq"><div class="ql">¿Cuál es la definición de...?</div><div class="qt">${escapeHtml(q.term)}</div></div>
+    <div id="quizOpts"></div>
+  </div>`;
+  const opts = document.getElementById('quizOpts');
+  opts.innerHTML = options.map(o=>`<div class="quizopt" data-id="${o.id}">${escapeHtml(o.definition)}</div>`).join('');
+  opts.querySelectorAll('.quizopt').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      if(quizAnswered) return;
+      quizAnswered = true;
+      const chosenId = el.dataset.id;
+      const correct = chosenId === q.id;
+      if(correct) quizScore++; else quizMissed.push(q);
+      opts.querySelectorAll('.quizopt').forEach(o=>{
+        o.classList.add('disabled');
+        if(o.dataset.id===q.id) o.classList.add('correct');
+        else if(o.dataset.id===chosenId) o.classList.add('wrong');
+      });
+      const btn = document.createElement('button');
+      btn.className = 'btn primary quiznext'; btn.textContent = (quizIdx+1<quizDeck.length) ? 'Siguiente ▶' : 'Ver resultado';
+      btn.onclick = ()=>{ quizIdx++; renderQuiz(); };
+      document.querySelector('.quizwrap').appendChild(btn);
+    });
+  });
+}
+function renderQuizEnd(){
+  const area = document.getElementById('quizArea');
+  const uniqueMissed = [...new Map(quizMissed.map(x=>[x.id,x])).values()];
+  area.innerHTML = `<div class="quizwrap quizend">
+    <div class="ql" style="color:var(--muted);font-size:12px;">Resultado</div>
+    <div class="score">${quizScore} / ${quizDeck.length}</div>
+    ${uniqueMissed.length ? `<div class="quizmissed"><div class="qm-t">Términos que fallaste</div>${uniqueMissed.map(x=>`<div class="qm-item"><b>${escapeHtml(x.term)}</b> — ${escapeHtml(x.definition)}</div>`).join('')}</div>` : `<div style="color:var(--ok);font-size:14px;margin:14px 0;">¡Todo correcto! 🎉</div>`}
+    <div class="row2">
+      <button class="btn" data-back="home">Volver</button>
+      ${uniqueMissed.length ? `<button class="btn primary" id="quizRetryMissed">🎯 Repasar solo fallados</button>` : ''}
+      <button class="btn primary" id="quizRetryAll">🔁 Repetir todos</button>
+    </div>
+  </div>`;
+  document.querySelectorAll('#quizArea [data-back]').forEach(b=> b.addEventListener('click', ()=> showView('home')));
+  const retryAll = document.getElementById('quizRetryAll');
+  if(retryAll) retryAll.addEventListener('click', ()=> startQuiz(quizTemaId));
+  const retryMissed = document.getElementById('quizRetryMissed');
+  if(retryMissed) retryMissed.addEventListener('click', ()=> startQuiz(quizTemaId, uniqueMissed));
+}
+
+/* ---------- TABLE ---------- */
+function renderTable(){
+  const t = findTema(currentTemaId);
+  if(!t){ showView('home'); return; }
+  document.getElementById('tbTitle').textContent = t.title;
+  const area = document.getElementById('mainArea');
+  let anyVisible = false;
+  let subtemaHtml = t.subtemas.map(s=>{
+    let terms = s.terminos;
+    if(favOnly) terms = terms.filter(x=>x.favorite);
+    if(searchQuery.trim()){ const q=searchQuery.toLowerCase(); terms = terms.filter(x=>x.term.toLowerCase().includes(q)||x.definition.toLowerCase().includes(q)); }
+    if(terms.length===0 && (favOnly||searchQuery.trim())) return '';
+    anyVisible = true;
+    return `<div class="subtemablock">
+      <div class="subspine" style="${textureCSS(s.texture||'diagonal', s.color)}"><div class="stitle" data-editsub="${s.id}">${escapeHtml(s.title)}</div></div>
+      <div class="termcol">
+        ${terms.map(x=>rowHtml(x)).join('') || `<div class="addrow" style="cursor:default;opacity:0.6;">Sin términos</div>`}
+        ${!favOnly && !searchQuery.trim() ? `<div class="addrow" data-addterm="${s.id}">+ Añadir término</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  if(!subtemaHtml || (!anyVisible && (favOnly||searchQuery.trim()))){
+    subtemaHtml = `<div class="emptytable"><b>${favOnly?'Sin favoritos aún':'Sin resultados'}</b>${favOnly?'Marca términos con la estrella.':'Prueba otra búsqueda.'}</div>`;
+  }
+  area.innerHTML = `
+    <div class="colheader">
+      <div class="ch-star">★</div>
+      <div class="ch-term">Término</div>
+      <div class="ch-def">Definición</div>
+      <div class="ch-ex">Ejemplo</div>
+    </div>
+    <div class="temablock">
+      <div class="spine" style="${textureCSS(t.texture||'diagonal', t.color)}">
+        <div class="spinebtn" id="temaAddBtn">+</div>
+        <div class="stitle" id="temaEditBtn">${escapeHtml(t.title)}</div>
+      </div>
+      <div class="subtemacol">
+        <div class="subtema-add-sticky" id="subtemaAddSticky">+</div>
+        ${subtemaHtml}
+      </div>
+    </div>`;
+  attachTableEvents(t);
+}
+function rowHtml(term){
+  const exp = term.id===expandedId;
+  const bg = term.color || 'transparent';
+  const tc = term.textColor || 'var(--ink)';
+  return `<div class="row ${exp?'expanded':''}" data-id="${term.id}" style="--rowbg:${bg};--rowtext:${tc}">
+    <div class="star-cell">
+      <button class="rowbtn star ${term.favorite?'fav':''}" data-star="${term.id}">★</button>
+      <div class="rowextra">
+        <button class="rowbtn" data-paint="${term.id}">🎨</button>
+        <button class="rowbtn" data-del="${term.id}">🗑</button>
+      </div>
+    </div>
+    <div class="term-cell"><input class="term-input" data-id="${term.id}" value="${escapeHtml(term.term)}" placeholder="término"></div>
+    <div class="def-cell">
+      <div class="def-preview">${escapeHtml(term.definition)||'Toca para escribir...'}</div>
+      <textarea class="def-edit" data-id="${term.id}" placeholder="Definición...">${escapeHtml(term.definition)}</textarea>
+    </div>
+    <div class="ex-cell">
+      <div class="ex-preview">${escapeHtml(term.example)||'—'}</div>
+      <textarea class="ex-edit" data-id="${term.id}" placeholder="Ejemplo...">${escapeHtml(term.example)}</textarea>
+    </div>
+  </div>`;
+}
+function autoGrow(ta){ ta.style.height='auto'; ta.style.height=Math.max(60,ta.scrollHeight)+'px'; }
+function attachTableEvents(t){
+  document.getElementById('temaAddBtn').addEventListener('click', ()=> openTemaModal(null));
+  document.getElementById('temaEditBtn').addEventListener('click', ()=> openTemaModal(t.id));
+  document.getElementById('subtemaAddSticky').addEventListener('click', ()=> openSubtemaModal(t.id, null));
+  document.querySelectorAll('[data-editsub]').forEach(el=> el.addEventListener('click', ()=> openSubtemaModal(t.id, el.dataset.editsub)));
+  document.querySelectorAll('[data-addterm]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const s = findSubtema(t, el.dataset.addterm);
+      const nt = {id:uid(), term:'', definition:'', example:'', favorite:false, color:'', textColor:''};
+      s.terminos.push(nt); expandedId = nt.id; renderTable();
+      setTimeout(()=>{ const inp=document.querySelector(`.term-input[data-id="${nt.id}"]`); if(inp) inp.focus(); },30);
+    });
+  });
+  document.querySelectorAll('.row').forEach(rowEl=>{
+    rowEl.addEventListener('click', ev=>{
+      if(ev.target.closest('.rowbtn')) return;
+      const id = rowEl.dataset.id;
+      if(expandedId===id) return;
+      expandedId = id; renderTable();
+      const ta = document.querySelector(`.def-edit[data-id="${id}"]`); if(ta) autoGrow(ta);
+    });
+  });
+  document.querySelectorAll('.term-input').forEach(inp=>{
+    inp.addEventListener('click', ev=>ev.stopPropagation());
+    inp.addEventListener('input', ()=>{ getTerm(inp.dataset.id).term = inp.value; });
+  });
+  document.querySelectorAll('.def-edit,.ex-edit').forEach(ta=>{
+    ta.addEventListener('click', ev=>ev.stopPropagation());
+    ta.addEventListener('input', ()=>{
+      const term = getTerm(ta.dataset.id);
+      if(ta.classList.contains('def-edit')) term.definition = ta.value; else term.example = ta.value;
+      autoGrow(ta);
+    });
+    ta.addEventListener('blur', ()=>{ expandedId=null; renderTable(); });
+  });
+  document.querySelectorAll('[data-star]').forEach(b=> b.addEventListener('click', ev=>{ ev.stopPropagation(); getTerm(b.dataset.star).favorite = !getTerm(b.dataset.star).favorite; renderTable(); }));
+  document.querySelectorAll('[data-paint]').forEach(b=> b.addEventListener('click', ev=>{ ev.stopPropagation(); openRowColorModal(b.dataset.paint); }));
+  document.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', ev=>{ ev.stopPropagation(); openConfirm('term', b.dataset.del, 'Eliminar término', 'Se borrará este término.'); }));
+}
+function getTerm(id){ for(const t of data.temas) for(const s of t.subtemas){ const f=s.terminos.find(x=>x.id===id); if(f) return f; } }
+document.getElementById('searchInput').addEventListener('input', e=>{ searchQuery=e.target.value; renderTable(); });
+document.getElementById('favToggle').addEventListener('click', ()=>{ favOnly=!favOnly; document.getElementById('favToggle').classList.toggle('on',favOnly); renderTable(); });
+
+/* SWATCHES */
+function buildSwatches(container, selected, onPick){
+  container.innerHTML = FAMILIES.map(f=>`<div class="familyrow">${f.s.map(c=>`<div class="swatch ${c===selected?'sel':''}" style="background:${c}" data-c="${c}"></div>`).join('')}</div>`).join('');
+  container.querySelectorAll('.swatch').forEach(sw=> sw.addEventListener('click', ()=>{ container.querySelectorAll('.swatch').forEach(s=>s.classList.remove('sel')); sw.classList.add('sel'); onPick(sw.dataset.c); }));
+}
+
+function buildTexturePicker(container, selected, previewColor, onPick){
+  container.innerHTML = Object.keys(TEXTURES).map(id=>{
+    const t = TEXTURES[id];
+    let style = `background-color:${previewColor};`;
+    if(t.image!=='none'){ style += `background-image:${t.image};background-size:${t.size};`; if(t.pos) style+=`background-position:${t.pos};`; }
+    return `<div class="texswatch ${id===selected?'sel':''}" data-t="${id}"><div class="tp" style="${style}"></div><div class="tl">${t.label}</div></div>`;
+  }).join('');
+  container.querySelectorAll('.texswatch').forEach(sw=> sw.addEventListener('click', ()=>{ container.querySelectorAll('.texswatch').forEach(s=>s.classList.remove('sel')); sw.classList.add('sel'); onPick(sw.dataset.t); }));
+}
+
+/* TEMA MODAL */
+let editTemaId=null, temaColor='#2c4a6e', temaText='#f4f0e6', temaTexture='diagonal';
+function openTemaModal(id){
+  editTemaId = id; const t = id?findTema(id):null;
+  document.getElementById('temaModalTitle').textContent = t?'Editar tema':'Nuevo tema';
+  document.getElementById('temaNameInput').value = t?t.title:'';
+  temaColor = t?t.color:FAMILIES[6].s[2]; temaText = t?t.textColor:'#f4f0e6'; temaTexture = t?(t.texture||'diagonal'):'diagonal';
+  buildSwatches(document.getElementById('temaSwBg'), temaColor, c=>{ temaColor=c; refreshTemaTex(); });
+  buildSwatches(document.getElementById('temaSwText'), temaText, c=>temaText=c);
+  refreshTemaTex();
+  document.getElementById('temaDeleteBtn').style.display = t?'inline-block':'none';
+  document.getElementById('temaModal').classList.add('show');
+}
+function refreshTemaTex(){
+  buildTexturePicker(document.getElementById('temaTexPicker'), temaTexture, temaColor, id=>temaTexture=id);
+}
+document.getElementById('temaCancel').addEventListener('click', ()=>document.getElementById('temaModal').classList.remove('show'));
+document.getElementById('temaSave').addEventListener('click', ()=>{
+  const name = document.getElementById('temaNameInput').value.trim()||'Sin título';
+  if(editTemaId){ const t=findTema(editTemaId); t.title=name; t.color=temaColor; t.textColor=temaText; t.texture=temaTexture; }
+  else { const t={id:uid(),title:name,color:temaColor,textColor:temaText,texture:temaTexture,subtemas:[]}; data.temas.push(t); currentTemaId=t.id; }
+  document.getElementById('temaModal').classList.remove('show');
+  if(document.getElementById('view-table').classList.contains('active')) renderTable(); else renderHome();
+});
+document.getElementById('temaDeleteBtn').addEventListener('click', ()=>{ document.getElementById('temaModal').classList.remove('show'); openConfirm('tema', editTemaId, 'Eliminar tema', 'Se eliminará con todos sus subtemas y términos.'); });
+
+/* SUBTEMA MODAL */
+let editSubtemaId=null, editSubtemaTemaId=null, subColor='#8a5a12', subText='#f4f0e6', subTexture='diagonal';
+function openSubtemaModal(temaId, subId){
+  editSubtemaTemaId = temaId; editSubtemaId = subId;
+  const t = findTema(temaId); const s = subId?findSubtema(t,subId):null;
+  document.getElementById('subtemaModalTitle').textContent = s?'Editar subtema':'Nuevo subtema';
+  document.getElementById('subtemaNameInput').value = s?s.title:'';
+  subColor = s?s.color:FAMILIES[2].s[2]; subText = s?s.textColor:'#f4f0e6'; subTexture = s?(s.texture||'diagonal'):'diagonal';
+  buildSwatches(document.getElementById('subtemaSwBg'), subColor, c=>{ subColor=c; refreshSubTex(); });
+  buildSwatches(document.getElementById('subtemaSwText'), subText, c=>subText=c);
+  refreshSubTex();
+  document.getElementById('subtemaDeleteBtn').style.display = s?'inline-block':'none';
+  document.getElementById('subtemaModal').classList.add('show');
+}
+function refreshSubTex(){
+  buildTexturePicker(document.getElementById('subtemaTexPicker'), subTexture, subColor, id=>subTexture=id);
+}
+document.getElementById('subtemaCancel').addEventListener('click', ()=>document.getElementById('subtemaModal').classList.remove('show'));
+document.getElementById('subtemaSave').addEventListener('click', ()=>{
+  const name = document.getElementById('subtemaNameInput').value.trim()||'Sin título';
+  const t = findTema(editSubtemaTemaId);
+  if(editSubtemaId){ const s=findSubtema(t,editSubtemaId); s.title=name; s.color=subColor; s.textColor=subText; s.texture=subTexture; }
+  else { t.subtemas.push({id:uid(),title:name,color:subColor,textColor:subText,texture:subTexture,terminos:[]}); }
+  document.getElementById('subtemaModal').classList.remove('show'); renderTable();
+});
+document.getElementById('subtemaDeleteBtn').addEventListener('click', ()=>{ document.getElementById('subtemaModal').classList.remove('show'); openConfirm('subtema', editSubtemaId, 'Eliminar subtema', 'Se eliminará con sus términos.', editSubtemaTemaId); });
+
+/* ROW COLOR */
+function openRowColorModal(id){
+  const term = getTerm(id);
+  buildSwatches(document.getElementById('rowSwBg'), term.color, c=>{ term.color=c; renderTable(); openRowColorModal(id); });
+  buildSwatches(document.getElementById('rowSwText'), term.textColor, c=>{ term.textColor=c; renderTable(); openRowColorModal(id); });
+  document.getElementById('rowColorModal').classList.add('show');
+}
+document.getElementById('rowColorClose').addEventListener('click', ()=>document.getElementById('rowColorModal').classList.remove('show'));
+
+/* CONFIRM */
+function openConfirm(type,id,title,text,extra){
+  pendingDelete = {type,id,extra};
   document.getElementById('confirmTitle').textContent = title;
   document.getElementById('confirmText').textContent = text;
   document.getElementById('confirmModal').classList.add('show');
@@ -320,130 +727,20 @@ function openConfirm(type,id,title,text){
 document.getElementById('confirmCancel').addEventListener('click', ()=>{ pendingDelete=null; document.getElementById('confirmModal').classList.remove('show'); });
 document.getElementById('confirmOk').addEventListener('click', ()=>{
   if(pendingDelete){
-    if(pendingDelete.type==='tema'){
-      data.temas = data.temas.filter(t=>t.id!==pendingDelete.id);
-      if(data.currentId===pendingDelete.id) data.currentId = data.temas[0]?.id || null;
-    } else if(pendingDelete.type==='term'){
-      const t = currentTema();
-      if(t) t.terms = t.terms.filter(term=>term.id!==pendingDelete.id);
-    }
-    save();
+    if(pendingDelete.type==='tema'){ data.temas = data.temas.filter(t=>t.id!==pendingDelete.id); if(currentTemaId===pendingDelete.id) currentTemaId=null; }
+    else if(pendingDelete.type==='subtema'){ const t=findTema(pendingDelete.extra); t.subtemas=t.subtemas.filter(s=>s.id!==pendingDelete.id); }
+    else if(pendingDelete.type==='term'){ for(const t of data.temas) for(const s of t.subtemas) s.terminos=s.terminos.filter(x=>x.id!==pendingDelete.id); }
   }
   pendingDelete=null;
   document.getElementById('confirmModal').classList.remove('show');
-  renderAll();
+  if(currentTemaId) renderTable(); else showView('home');
 });
 
-// ---------- ROWS ----------
-let expandedId = null;
-function escapeHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function renderRows(){
-  const wrap = document.getElementById('rowsWrap');
-  const t = currentTema();
-  if(!t){
-    wrap.innerHTML = `<div class="emptytema"><b>Crea tu primer tema</b>Toca "+ Nuevo tema" arriba para empezar a añadir términos y definiciones.</div>`;
-    return;
-  }
-  let terms = t.terms;
-  if(searchQuery.trim()){
-    const q = searchQuery.toLowerCase();
-    terms = terms.filter(x=>x.term.toLowerCase().includes(q) || x.definition.toLowerCase().includes(q));
-  }
-  if(terms.length===0){
-    wrap.innerHTML = `<div class="emptytema"><b>Sin términos todavía</b>Añade el primero para este tema.</div>` + addRowHtml();
-  } else {
-    wrap.innerHTML = terms.map(rowHtml).join('') + addRowHtml();
-  }
-  attachRowEvents();
-}
-function rowHtml(term){
-  const exp = term.id===expandedId;
-  return `<div class="row ${exp?'expanded':''}" data-id="${term.id}">
-    <div class="term-cell"><input class="term-input" data-id="${term.id}" value="${escapeHtml(term.term)}" placeholder="término"></div>
-    <div class="def-cell">
-      <div class="def-preview">${escapeHtml(term.definition) || 'Sin definición — toca para escribir.'}</div>
-      <textarea class="def-edit" data-id="${term.id}" placeholder="Escribe la definición...">${escapeHtml(term.definition)}</textarea>
-    </div>
-    <div class="rowactions"><button class="rowbtn" data-del="${term.id}">🗑</button></div>
-  </div>`;
-}
-function addRowHtml(){
-  return `<div class="addrow" id="addRowBtn">+ Añadir término</div>`;
-}
-function autoGrow(ta){ ta.style.height='auto'; ta.style.height = Math.max(70, ta.scrollHeight)+'px'; }
-function attachRowEvents(){
-  document.querySelectorAll('.row').forEach(rowEl=>{
-    rowEl.addEventListener('click', ev=>{
-      if(ev.target.closest('.rowbtn')) return;
-      const id = rowEl.dataset.id;
-      if(expandedId===id) return;
-      expandedId = id;
-      renderRows();
-      const ta = document.querySelector(`.def-edit[data-id="${id}"]`);
-      if(ta){ autoGrow(ta); }
-    });
-  });
-  document.querySelectorAll('.term-input').forEach(inp=>{
-    inp.addEventListener('click', ev=> ev.stopPropagation());
-    inp.addEventListener('input', ()=>{
-      const t = currentTema(); const term = t.terms.find(x=>x.id===inp.dataset.id);
-      if(term){ term.term = inp.value; save(); }
-    });
-  });
-  document.querySelectorAll('.def-edit').forEach(ta=>{
-    ta.addEventListener('click', ev=> ev.stopPropagation());
-    ta.addEventListener('input', ()=>{
-      const t = currentTema(); const term = t.terms.find(x=>x.id===ta.dataset.id);
-      if(term){ term.definition = ta.value; save(); }
-      autoGrow(ta);
-    });
-    ta.addEventListener('blur', ()=>{ expandedId = null; renderRows(); });
-  });
-  document.querySelectorAll('[data-del]').forEach(btn=>{
-    if(!btn.classList.contains('rowbtn')) return;
-    btn.addEventListener('click', ev=>{
-      ev.stopPropagation();
-      openConfirm('term', btn.dataset.del, 'Eliminar término', 'Se borrará este término y su definición.');
-    });
-  });
-  const addBtn = document.getElementById('addRowBtn');
-  if(addBtn) addBtn.addEventListener('click', ()=>{
-    const t = currentTema(); if(!t) return;
-    const nt = {id:uid(), term:'', definition:''};
-    t.terms.push(nt); save();
-    expandedId = nt.id;
-    renderRows();
-    setTimeout(()=>{ const inp = document.querySelector(`.term-input[data-id="${nt.id}"]`); if(inp) inp.focus(); },30);
-  });
-}
-document.getElementById('searchInput').addEventListener('input', e=>{ searchQuery = e.target.value; renderRows(); });
+document.getElementById('dataBtn').addEventListener('click', ()=>document.getElementById('dataModal').classList.add('show'));
+document.getElementById('dataClose').addEventListener('click', ()=>document.getElementById('dataModal').classList.remove('show'));
 
-// ---------- DATA MODAL ----------
-document.getElementById('dataBtn').addEventListener('click', ()=> document.getElementById('dataModal').classList.add('show'));
-document.getElementById('dataModal').addEventListener('click', e=>{ if(e.target.id==='dataModal') e.target.classList.remove('show'); });
-document.getElementById('exportBtn').addEventListener('click', ()=>{
-  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download='glosa-backup.json'; a.click();
-  URL.revokeObjectURL(url);
-});
-document.getElementById('importBtn').addEventListener('click', ()=> document.getElementById('fileInput').click());
-document.getElementById('fileInput').addEventListener('change', e=>{
-  const file = e.target.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = ()=>{
-    try{
-      const d = JSON.parse(reader.result);
-      if(d.temas){ data = d; save(); renderAll(); document.getElementById('dataModal').classList.remove('show'); }
-    }catch(err){ alert('Archivo no válido'); }
-  };
-  reader.readAsText(file);
-});
-
-// ---------- INIT ----------
-function renderAll(){ renderTemaSelect(); renderRows(); }
-load();
-renderAll();
+seed();
+renderHome();
 
 if('serviceWorker' in navigator){
   window.addEventListener('load', ()=> navigator.serviceWorker.register('sw.js').catch(()=>{}));
