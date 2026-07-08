@@ -12,11 +12,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,700;1,8..60,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#12151b; --bg-2:#1a1e26; --paper:#faf8f2; --ink:#1c2029; --gridline:#1c2029;
+  --bg:#12151b; --bg-2:#1a1e26; --paper:#faf8f2; --ink:#1c2029; --gridline:#1c2029; --fg:#f0ece0;
   --muted:#8b93a3; --accent:#c98a2c; --line:#2b3140; --danger:#b6472f; --star:#c9a02c; --ok:#3d7a5c;
 }
+body.dark-mode{ --paper:#20242e; --ink:#eee8da; --gridline:#3a4150; }
+body.dark-mode .memocard{ background:#252a35; }
+body.dark-mode .flashcard{ box-shadow:0 12px 30px rgba(0,0,0,0.6); }
 *{box-sizing:border-box;} html,body{height:100%;margin:0;}
-body{background:var(--bg);color:var(--paper);font-family:'Inter',sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent;}
 .serif{font-family:'Source Serif 4',serif;}
 #app{height:100vh;display:flex;flex-direction:column;}
 ::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px;}
@@ -30,38 +33,44 @@ body{background:var(--bg);color:var(--paper);font-family:'Inter',sans-serif;over
 .sectionlabel{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin:22px 0 10px;}
 .temagrid{display:flex;flex-direction:column;gap:10px;}
 .temacard{background:var(--bg-2);border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;border-left:6px solid var(--c,#2c4a6e);}
-.temacard .tn{font-family:'Source Serif 4';font-weight:700;font-size:18px;color:var(--paper);margin-bottom:6px;}
-.subchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.temacard .tn{font-family:'Source Serif 4';font-weight:700;font-size:18px;color:var(--fg);margin-bottom:6px;}
+.subchips{margin-bottom:10px;font-size:12px;color:var(--muted);font-family:'IBM Plex Mono';}
 .subchip{font-family:'IBM Plex Mono';font-size:10.5px;padding:3px 9px;border-radius:20px;background:rgba(255,255,255,0.08);color:var(--muted);}
 .subchip.none{font-style:italic;}
 .studybtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.studybtn{flex:1;background:rgba(255,255,255,0.06);border:1px solid var(--line);color:var(--paper);border-radius:9px;padding:8px 6px;font-size:12px;font-weight:600;text-align:center;cursor:pointer;}
+.studybtn{flex:1;background:rgba(255,255,255,0.06);border:1px solid var(--line);color:var(--fg);border-radius:9px;padding:8px 6px;font-size:12px;font-weight:600;text-align:center;cursor:pointer;}
 .studybtn:active{background:rgba(255,255,255,0.12);}
 .newtemabtn{margin-top:16px;width:100%;padding:14px;border-radius:12px;border:1px dashed var(--accent);background:none;color:var(--accent);font-weight:700;font-size:14px;cursor:pointer;}
+.timecard{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-left:6px solid var(--c,#2c4a6e);}
+.timecard .tn{font-family:'Source Serif 4';font-weight:700;font-size:15px;color:var(--fg);}
+.timecard .tt{font-family:'IBM Plex Mono';font-size:13px;color:var(--accent);font-weight:600;}
+.statrow{display:flex;flex-wrap:wrap;gap:10px;font-size:11.5px;color:var(--muted);font-family:'IBM Plex Mono';}
+.statlast{font-size:10.5px;color:var(--muted);font-style:italic;}
+.temaimg{width:38px;height:38px;border-radius:8px;object-fit:cover;flex-shrink:0;}
 
 /* TOPBAR (shared) */
 .topbar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg-2);border-bottom:1px solid var(--line);flex-shrink:0;z-index:30;}
-.iconbtn{background:none;border:1px solid var(--line);color:var(--paper);width:34px;height:34px;border-radius:8px;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.iconbtn{background:none;border:1px solid var(--line);color:var(--fg);width:34px;height:34px;border-radius:8px;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
 .iconbtn:active{background:rgba(255,255,255,0.06);}
 .iconbtn.on{background:var(--accent);color:#1c1a17;border-color:var(--accent);}
-.tbtitle{font-family:'Source Serif 4';font-weight:700;font-style:italic;font-size:16px;color:var(--paper);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tbtitle{font-family:'Source Serif 4';font-weight:700;font-style:italic;font-size:16px;color:var(--fg);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .searchrow{padding:8px 12px;background:var(--bg-2);border-bottom:1px solid var(--line);flex-shrink:0;}
-#searchInput{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--paper);padding:7px 10px;border-radius:8px;font-size:13px;}
+#searchInput{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--fg);padding:7px 10px;border-radius:8px;font-size:13px;}
 
 /* TABLE VIEW */
 .mainarea{flex:1;overflow:auto;background:var(--paper);position:relative;}
-.colheader{position:sticky;top:0;z-index:5;display:flex;background:var(--paper);border-bottom:2px solid var(--gridline);margin-left:86px;height:40px;}
-.ch-star{width:42px;flex-shrink:0;border-right:1px solid var(--gridline);display:flex;align-items:center;justify-content:center;color:var(--star);font-size:15px;}
-.ch-term{width:110px;flex-shrink:0;border-right:1px solid var(--gridline);padding:0 8px;display:flex;align-items:center;font-weight:700;font-size:12px;color:var(--ink);text-transform:uppercase;letter-spacing:0.4px;}
-.ch-def{width:150px;flex-shrink:0;border-right:1px solid var(--gridline);padding:0 8px;display:flex;align-items:center;font-weight:700;font-size:12px;color:var(--ink);text-transform:uppercase;letter-spacing:0.4px;}
-.ch-ex{flex:1;min-width:130px;padding:0 8px;display:flex;align-items:center;font-weight:700;font-size:12px;color:var(--ink);text-transform:uppercase;letter-spacing:0.4px;}
+.colheader{position:sticky;top:0;z-index:5;display:flex;background:var(--bg-2);border-bottom:2px solid var(--accent);margin-left:86px;height:40px;box-shadow:0 4px 10px rgba(0,0,0,0.35);}
+.ch-star{width:42px;flex-shrink:0;border-right:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--star);font-size:15px;}
+.ch-term{width:110px;flex-shrink:0;border-right:1px solid var(--line);padding:0 8px;display:flex;align-items:center;font-weight:700;font-size:12px;color:var(--fg);text-transform:uppercase;letter-spacing:0.4px;}
+.ch-def{width:150px;flex-shrink:0;border-right:1px solid var(--line);padding:0 8px;display:flex;align-items:center;font-weight:700;font-size:12px;color:var(--fg);text-transform:uppercase;letter-spacing:0.4px;}
+.ch-ex{flex:0 0 320px;min-width:320px;padding:0 8px;display:flex;align-items:center;font-weight:700;font-size:12px;color:var(--fg);text-transform:uppercase;letter-spacing:0.4px;}
 
 .temablock{display:flex;min-height:100%;}
 .spine{width:46px;flex-shrink:0;position:relative;background:var(--c,#2c4a6e);display:flex;flex-direction:column;align-items:center;}
-.spinebtn{position:sticky;top:0;z-index:6;width:100%;aspect-ratio:1;background:var(--danger);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--paper);}
+.spinebtn{position:sticky;top:0;z-index:6;width:100%;aspect-ratio:1;background:var(--danger);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--fg);}
 .spine .stitle{writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Source Serif 4';font-weight:600;font-style:italic;font-size:14.5px;color:#f4f0e6;padding:14px 0;white-space:nowrap;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;}
 .subtemacol{display:flex;flex-direction:column;flex:1;min-width:0;position:relative;}
-.subtema-add-sticky{position:sticky;top:0;z-index:6;width:40px;height:40px;background:var(--accent);color:#1c1a17;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--paper);}
+.subtema-add-sticky{position:sticky;top:0;z-index:6;width:40px;height:40px;background:var(--accent);color:#1c1a17;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;cursor:pointer;border-bottom:2px solid var(--fg);}
 .subtemablock{display:flex;}
 .subspine{width:40px;flex-shrink:0;background:var(--c,#5c4a2c);display:flex;flex-direction:column;align-items:center;}
 .subspine .stitle{writing-mode:vertical-rl;transform:rotate(180deg);font-family:'Inter';font-weight:700;font-size:11.5px;color:#f4f0e6;padding:10px 0;white-space:nowrap;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;}
@@ -80,7 +89,8 @@ body{background:var(--bg);color:var(--paper);font-family:'Inter',sans-serif;over
 .row.expanded .term-input{pointer-events:auto;font-size:15.5px;}
 .term-input:focus{outline:none;}
 .def-cell{width:150px;flex-shrink:0;border-right:1px solid var(--gridline);padding:9px 8px;}
-.ex-cell{flex:1;min-width:130px;padding:9px 8px;}
+.ex-cell{flex:0 0 320px;min-width:320px;padding:9px 8px;}
+.row.expanded .ex-cell{flex:0 0 340px;min-width:340px;}
 .def-preview,.ex-preview{font-size:11.5px;opacity:0.85;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .ex-preview{font-style:italic;}
 .row.expanded .def-preview,.row.expanded .ex-preview{display:none;}
@@ -97,9 +107,9 @@ body{background:var(--bg);color:var(--paper);font-family:'Inter',sans-serif;over
 .flashwrap{width:100%;max-width:340px;}
 .flashcounter{text-align:center;color:var(--muted);font-size:12px;margin-bottom:10px;font-family:'IBM Plex Mono';}
 .flashcard{
-  background:var(--paper);color:var(--ink);border-radius:16px;min-height:260px;padding:26px 22px;
+  background:var(--paper);color:var(--ink);border-radius:16px;min-height:220px;max-height:60vh;padding:30px 22px 22px;
   display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;
-  box-shadow:0 12px 30px rgba(0,0,0,0.4);position:relative;
+  box-shadow:0 12px 30px rgba(0,0,0,0.4);position:relative;overflow-y:auto;
 }
 .flashcard .fc-label{position:absolute;top:12px;left:16px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;}
 .flashcard .fc-term{font-family:'Source Serif 4';font-weight:700;font-size:26px;}
@@ -116,9 +126,11 @@ body{background:var(--bg);color:var(--paper);font-family:'Inter',sans-serif;over
 #view-memo .mainarea{background:var(--bg);padding:16px;overflow-y:auto;}
 .memogrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:420px;margin:0 auto;}
 .memocard{
-  background:var(--bg-2);border:1px solid var(--line);border-radius:10px;min-height:84px;
+  background:var(--bg-2);border:1px solid var(--line);border-radius:10px;min-height:84px;max-height:170px;
   display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;cursor:pointer;font-size:12.5px;
+  overflow-y:auto;line-height:1.35;
 }
+.memocard.longtext{font-size:10.5px;}
 .memocard .back-face{font-size:20px;color:var(--muted);}
 .memocard.flipped{background:var(--paper);color:var(--ink);border-color:var(--accent);font-weight:600;}
 .memocard.matched{background:var(--ok);color:#fff;border-color:var(--ok);opacity:0.85;cursor:default;}
@@ -132,7 +144,7 @@ body{background:var(--bg);color:var(--paper);font-family:'Inter',sans-serif;over
 .quizq{background:var(--paper);color:var(--ink);border-radius:14px;padding:20px 18px;text-align:center;margin-bottom:16px;box-shadow:0 10px 26px rgba(0,0,0,0.35);}
 .quizq .ql{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:700;margin-bottom:6px;}
 .quizq .qt{font-family:'Source Serif 4';font-weight:700;font-size:22px;}
-.quizopt{background:var(--bg-2);border:1px solid var(--line);color:var(--paper);border-radius:10px;padding:12px 14px;margin-bottom:9px;font-size:13.5px;cursor:pointer;line-height:1.4;}
+.quizopt{background:var(--bg-2);border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:12px 14px;margin-bottom:9px;font-size:13.5px;cursor:pointer;line-height:1.4;}
 .quizopt.correct{background:var(--ok);border-color:var(--ok);color:#fff;font-weight:600;}
 .quizopt.wrong{background:var(--danger);border-color:var(--danger);color:#fff;}
 .quizopt.disabled{cursor:default;}
@@ -151,15 +163,15 @@ body{background:var(--bg);color:var(--paper);font-family:'Inter',sans-serif;over
 .modal{background:var(--bg-2);border:1px solid var(--line);border-radius:12px;padding:18px;width:min(360px,90vw);max-height:85vh;overflow-y:auto;}
 .modal h3{margin:0 0 10px;font-family:'Source Serif 4';color:var(--accent);font-style:italic;}
 .modal p{font-size:12.5px;color:var(--muted);line-height:1.5;margin:0 0 12px;}
-.modal input[type=text]{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--paper);padding:9px 10px;border-radius:8px;font-size:14px;margin-bottom:12px;}
+.modal input[type=text]{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--fg);padding:9px 10px;border-radius:8px;font-size:14px;margin-bottom:12px;}
 .row2{display:flex;gap:8px;justify-content:flex-end;}
-.btn{padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:none;color:var(--paper);font-size:13px;cursor:pointer;font-weight:600;}
+.btn{padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:none;color:var(--fg);font-size:13px;cursor:pointer;font-weight:600;}
 .btn.primary{background:var(--accent);color:#1c1a17;border-color:var(--accent);}
 .btn.danger{background:var(--danger);color:#fff;border-color:var(--danger);}
 .colorlabel{font-size:11.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin:10px 0 6px;}
 .familyrow{display:flex;gap:5px;margin-bottom:5px;}
 .swatch{width:28px;height:28px;border-radius:6px;cursor:pointer;border:2px solid transparent;flex-shrink:0;}
-.swatch.sel{border-color:var(--paper);box-shadow:0 0 0 1px var(--accent);}
+.swatch.sel{border-color:var(--fg);box-shadow:0 0 0 1px var(--accent);}
 .texpicker{display:flex;flex-wrap:wrap;gap:8px;}
 .texswatch{width:64px;cursor:pointer;border:2px solid var(--line);border-radius:7px;flex-shrink:0;overflow:hidden;}
 .texswatch.sel{border-color:var(--accent);}
@@ -170,12 +182,17 @@ body{background:var(--bg);color:var(--paper);font-family:'Inter',sans-serif;over
 <body>
 <div id="app">
   <div id="view-home" class="view active">
-    <div class="hometitle">Glosa</div>
-    <div class="homesub">Organización de Términos para el estudio</div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+      <div>
+        <div class="hometitle">Glosa</div>
+        <div class="homesub">Organización de Términos para el estudio</div>
+      </div>
+      <button class="iconbtn" id="darkToggleHome" title="Modo nocturno">🌙</button>
+    </div>
     <div class="temagrid" id="temaGrid"></div>
     <button class="newtemabtn" id="newTemaBtn">+ Nuevo tema</button>
     <div class="sectionlabel">Aprendizaje</div>
-    <div style="color:var(--muted);font-size:12.5px;">🃏 Tarjetas para repasar, 🧠 Memorama para jugar, ❓ Quiz para detectar qué términos aún no dominas — al final te deja repasar solo esos.</div>
+    <div class="temagrid" id="studyTimeGrid"></div>
   </div>
 
   <div id="view-table" class="view">
@@ -183,6 +200,7 @@ body{background:var(--bg);color:var(--paper);font-family:'Inter',sans-serif;over
       <button class="iconbtn" data-back="home">←</button>
       <div class="tbtitle" id="tbTitle">Tema</div>
       <button class="iconbtn" id="favToggle" title="Solo favoritos">★</button>
+      <button class="iconbtn" id="darkToggleTable" title="Modo nocturno">🌙</button>
       <button class="iconbtn" id="dataBtn">⋮</button>
     </div>
     <div class="searchrow"><input id="searchInput" placeholder="Buscar término..."></div>
@@ -240,6 +258,13 @@ body{background:var(--bg);color:var(--paper);font-family:'Inter',sans-serif;over
   <div class="modal">
     <h3 id="temaModalTitle">Nuevo tema</h3>
     <input type="text" id="temaNameInput" placeholder="Nombre del tema">
+    <div class="colorlabel">Imagen (opcional)</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+      <img id="temaImgPreview" style="width:44px;height:44px;border-radius:8px;object-fit:cover;display:none;background:var(--bg);">
+      <button class="btn" type="button" id="temaImgPickBtn">Elegir imagen</button>
+      <button class="btn" type="button" id="temaImgClearBtn" style="display:none;">Quitar</button>
+    </div>
+    <input type="file" id="temaImgInput" accept="image/*" style="display:none;">
     <div class="colorlabel">Color de fondo</div><div id="temaSwBg"></div>
     <div class="colorlabel">Color del texto</div><div id="temaSwText"></div>
     <div class="colorlabel">Textura</div><div id="temaTexPicker" class="texpicker"></div>
@@ -326,6 +351,22 @@ let searchQuery = '';
 let favOnly = false;
 let expandedId = null;
 let pendingDelete = null;
+let saveTimer = null;
+
+function loadData(){
+  try{
+    const raw = localStorage.getItem('glosa-data-v2');
+    if(raw){ data = JSON.parse(raw); return; }
+  }catch(e){}
+  seed();
+}
+function saveData(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{ localStorage.setItem('glosa-data-v2', JSON.stringify(data)); }
+    catch(e){ console.error('No se pudo guardar', e); }
+  }, 300);
+}
 
 function seed(){
   const t = {id:uid(), title:'Términos de estudio', color:'#6e2c4a', textColor:'#f4f0e6', texture:'diagonal', subtemas:[
@@ -342,8 +383,31 @@ function findTema(id){ return data.temas.find(t=>t.id===id); }
 function findSubtema(tema,id){ return tema.subtemas.find(s=>s.id===id); }
 function temaTerms(t){ return t.subtemas.flatMap(s=>s.terminos).filter(x=>x.term.trim()); }
 
+/* DARK MODE */
+function toggleDark(){
+  document.body.classList.toggle('dark-mode');
+  const on = document.body.classList.contains('dark-mode');
+  document.getElementById('darkToggleHome').classList.toggle('on', on);
+  document.getElementById('darkToggleTable').classList.toggle('on', on);
+}
+document.getElementById('darkToggleHome').addEventListener('click', toggleDark);
+document.getElementById('darkToggleTable').addEventListener('click', toggleDark);
+
 /* NAV */
-document.querySelectorAll('[data-back]').forEach(b=> b.addEventListener('click', ()=> showView('home')));
+let studyTimerTemaId = null, studyTimerStart = null;
+function startStudyTimer(temaId){
+  if(studyTimerTemaId === temaId) return;
+  stopStudyTimer();
+  studyTimerTemaId = temaId; studyTimerStart = Date.now();
+}
+function stopStudyTimer(){
+  if(studyTimerTemaId && studyTimerStart){
+    const t = findTema(studyTimerTemaId);
+    if(t){ t.studySeconds = (t.studySeconds||0) + Math.round((Date.now()-studyTimerStart)/1000); saveData(); }
+  }
+  studyTimerTemaId = null; studyTimerStart = null;
+}
+document.querySelectorAll('[data-back]').forEach(b=> b.addEventListener('click', ()=>{ stopStudyTimer(); showView('home'); }));
 function showView(name){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+name).classList.add('active');
@@ -356,8 +420,11 @@ function renderHome(){
   if(data.temas.length===0){ grid.innerHTML = `<div style="color:var(--muted);font-size:13px;">Crea tu primer tema para empezar.</div>`; return; }
   grid.innerHTML = data.temas.map(t=>`
     <div class="temacard" style="--c:${t.color}" data-id="${t.id}">
-      <div class="tn">${escapeHtml(t.title)}</div>
-      <div class="subchips">${t.subtemas.length ? t.subtemas.map(s=>`<span class="subchip">${escapeHtml(s.title)}</span>`).join('') : '<span class="subchip none">sin subtemas</span>'}</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        ${t.image ? `<img class="temaimg" src="${t.image}">` : ''}
+        <div class="tn" style="margin-bottom:0;">${escapeHtml(t.title)}</div>
+      </div>
+      <div class="subchips">${temaTerms(t).length} término${temaTerms(t).length===1?'':'s'}</div>
       <div class="studybtns">
         <div class="studybtn" data-open="${t.id}">📖 Ver tabla</div>
         <div class="studybtn" data-flash="${t.id}">🃏 Tarjetas</div>
@@ -370,6 +437,43 @@ function renderHome(){
   grid.querySelectorAll('[data-memo]').forEach(el=> el.addEventListener('click', ev=>{ ev.stopPropagation(); startMemo(el.dataset.memo); }));
   grid.querySelectorAll('[data-quiz]').forEach(el=> el.addEventListener('click', ev=>{ ev.stopPropagation(); startQuiz(el.dataset.quiz); }));
   grid.querySelectorAll('.temacard').forEach(el=> el.addEventListener('click', ()=>{ currentTemaId=el.dataset.id; showView('table'); renderTable(); }));
+  renderStudyTime();
+}
+function fmtTime(sec){
+  if(!sec || sec<1) return '0 s';
+  if(sec<60) return sec+' s';
+  const m = Math.floor(sec/60);
+  return m+' min';
+}
+function fmtRelative(ts){
+  if(!ts) return 'Nunca practicado';
+  const diff = Math.round((Date.now()-ts)/1000);
+  if(diff<60) return 'Hace un momento';
+  if(diff<3600) return 'Hace '+Math.round(diff/60)+' min';
+  if(diff<86400) return 'Hace '+Math.round(diff/3600)+' h';
+  return 'Hace '+Math.round(diff/86400)+' días';
+}
+function renderStudyTime(){
+  const box = document.getElementById('studyTimeGrid');
+  if(data.temas.length===0){ box.innerHTML=''; return; }
+  box.innerHTML = data.temas.map(t=>{
+    const accuracy = t.quizQuestionsTotal ? Math.round((t.quizCorrectTotal/t.quizQuestionsTotal)*100) : null;
+    return `
+    <div class="timecard" style="--c:${t.color};flex-direction:column;align-items:stretch;gap:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span class="tn">${escapeHtml(t.title)}</span>
+        <span class="tt">⏱ ${fmtTime(t.studySeconds||0)}</span>
+      </div>
+      <div class="statrow">
+        <span>🃏 ${t.flashCount||0}×</span>
+        <span>🧠 ${t.memoCount||0}×</span>
+        <span>❓ ${t.quizCount||0}×</span>
+        ${accuracy!==null ? `<span>🎯 ${accuracy}%</span>` : ''}
+        ${t.quizBestPct ? `<span>🏆 ${t.quizBestPct}%</span>` : ''}
+      </div>
+      <div class="statlast">${fmtRelative(t.lastPracticed)}</div>
+    </div>`;
+  }).join('');
 }
 document.getElementById('newTemaBtn').addEventListener('click', ()=> openTemaModal(null));
 
@@ -380,14 +484,20 @@ function startFlash(temaId){
   flashDeck = temaTerms(t);
   if(flashDeck.length===0){ alert('Este tema todavía no tiene términos.'); return; }
   flashIdx = 0; flashFlipped = false;
+  t.flashCount = (t.flashCount||0)+1; t.lastPracticed = Date.now(); saveData();
   document.getElementById('flashTitle').textContent = 'Tarjetas · '+t.title;
   showView('flash'); renderFlash();
+  startStudyTimer(temaId);
 }
 function renderFlash(){
   const term = flashDeck[flashIdx];
   document.getElementById('flashCounter').textContent = (flashIdx+1)+'/'+flashDeck.length;
-  document.getElementById('fcTerm').textContent = term.term;
-  document.getElementById('fcDef').textContent = term.definition || 'Sin definición todavía.';
+  const termEl = document.getElementById('fcTerm');
+  termEl.textContent = term.term;
+  termEl.style.fontSize = term.term.length>30 ? '18px' : '26px';
+  const defEl = document.getElementById('fcDef');
+  defEl.textContent = term.definition || 'Sin definición todavía.';
+  defEl.style.fontSize = term.definition.length>220 ? '13.5px' : '16px';
   document.getElementById('fcEx').textContent = term.example ? 'Ej: '+term.example : '';
   document.getElementById('flashCard').classList.toggle('flipped', flashFlipped);
 }
@@ -406,9 +516,11 @@ function startMemo(temaId){
   const terms = temaTerms(t).slice(0,6);
   if(terms.length<2){ alert('Este tema necesita al menos 2 términos con definición.'); return; }
   memoTemaTitle = t.title;
+  t.memoCount = (t.memoCount||0)+1; t.lastPracticed = Date.now(); saveData();
   document.getElementById('memoTitle').textContent = 'Memorama · '+t.title;
   buildMemoDeck(terms);
   showView('memo'); renderMemo();
+  startStudyTimer(temaId);
 }
 function buildMemoDeck(terms){
   const cards = [];
@@ -431,7 +543,8 @@ function renderMemo(){
   grid.innerHTML = memoCards.map((c,i)=>{
     const flipped = memoFlipped.includes(i) || memoMatched.has(i);
     const matched = memoMatched.has(i);
-    return `<div class="memocard ${flipped?'flipped':''} ${matched?'matched':''}" data-i="${i}">
+    const longtext = c.text.length>45;
+    return `<div class="memocard ${flipped?'flipped':''} ${matched?'matched':''} ${longtext?'longtext':''}" data-i="${i}">
       ${flipped ? escapeHtml(c.text) : '<span class="back-face">?</span>'}
     </div>`;
   }).join('');
@@ -472,6 +585,7 @@ function startQuiz(temaId, onlyThese){
   quizIdx = 0; quizScore = 0; quizMissed = [];
   document.getElementById('quizTitle').textContent = 'Quiz · '+t.title;
   showView('quiz'); renderQuiz();
+  startStudyTimer(temaId);
 }
 function shuffleArr(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
 function renderQuiz(){
@@ -512,6 +626,16 @@ function renderQuiz(){
 function renderQuizEnd(){
   const area = document.getElementById('quizArea');
   const uniqueMissed = [...new Map(quizMissed.map(x=>[x.id,x])).values()];
+  const t = findTema(quizTemaId);
+  if(t){
+    t.quizCount = (t.quizCount||0)+1;
+    t.quizCorrectTotal = (t.quizCorrectTotal||0)+quizScore;
+    t.quizQuestionsTotal = (t.quizQuestionsTotal||0)+quizDeck.length;
+    const pct = Math.round((quizScore/quizDeck.length)*100);
+    t.quizBestPct = Math.max(t.quizBestPct||0, pct);
+    t.lastPracticed = Date.now();
+    saveData();
+  }
   area.innerHTML = `<div class="quizwrap quizend">
     <div class="ql" style="color:var(--muted);font-size:12px;">Resultado</div>
     <div class="score">${quizScore} / ${quizDeck.length}</div>
@@ -522,7 +646,7 @@ function renderQuizEnd(){
       <button class="btn primary" id="quizRetryAll">🔁 Repetir todos</button>
     </div>
   </div>`;
-  document.querySelectorAll('#quizArea [data-back]').forEach(b=> b.addEventListener('click', ()=> showView('home')));
+  document.querySelectorAll('#quizArea [data-back]').forEach(b=> b.addEventListener('click', ()=>{ stopStudyTimer(); showView('home'); }));
   const retryAll = document.getElementById('quizRetryAll');
   if(retryAll) retryAll.addEventListener('click', ()=> startQuiz(quizTemaId));
   const retryMissed = document.getElementById('quizRetryMissed');
@@ -605,7 +729,7 @@ function attachTableEvents(t){
     el.addEventListener('click', ()=>{
       const s = findSubtema(t, el.dataset.addterm);
       const nt = {id:uid(), term:'', definition:'', example:'', favorite:false, color:'', textColor:''};
-      s.terminos.push(nt); expandedId = nt.id; renderTable();
+      s.terminos.push(nt); expandedId = nt.id; saveData(); renderTable();
       setTimeout(()=>{ const inp=document.querySelector(`.term-input[data-id="${nt.id}"]`); if(inp) inp.focus(); },30);
     });
   });
@@ -621,18 +745,18 @@ function attachTableEvents(t){
   });
   document.querySelectorAll('.term-input').forEach(inp=>{
     inp.addEventListener('click', ev=>ev.stopPropagation());
-    inp.addEventListener('input', ()=>{ getTerm(inp.dataset.id).term = inp.value; });
+    inp.addEventListener('input', ()=>{ getTerm(inp.dataset.id).term = inp.value; saveData(); });
   });
   document.querySelectorAll('.def-edit,.ex-edit').forEach(ta=>{
     ta.addEventListener('click', ev=>ev.stopPropagation());
     ta.addEventListener('input', ()=>{
       const term = getTerm(ta.dataset.id);
       if(ta.classList.contains('def-edit')) term.definition = ta.value; else term.example = ta.value;
-      autoGrow(ta);
+      autoGrow(ta); saveData();
     });
     ta.addEventListener('blur', ()=>{ expandedId=null; renderTable(); });
   });
-  document.querySelectorAll('[data-star]').forEach(b=> b.addEventListener('click', ev=>{ ev.stopPropagation(); getTerm(b.dataset.star).favorite = !getTerm(b.dataset.star).favorite; renderTable(); }));
+  document.querySelectorAll('[data-star]').forEach(b=> b.addEventListener('click', ev=>{ ev.stopPropagation(); getTerm(b.dataset.star).favorite = !getTerm(b.dataset.star).favorite; saveData(); renderTable(); }));
   document.querySelectorAll('[data-paint]').forEach(b=> b.addEventListener('click', ev=>{ ev.stopPropagation(); openRowColorModal(b.dataset.paint); }));
   document.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', ev=>{ ev.stopPropagation(); openConfirm('term', b.dataset.del, 'Eliminar término', 'Se borrará este término.'); }));
 }
@@ -657,26 +781,43 @@ function buildTexturePicker(container, selected, previewColor, onPick){
 }
 
 /* TEMA MODAL */
-let editTemaId=null, temaColor='#2c4a6e', temaText='#f4f0e6', temaTexture='diagonal';
+let editTemaId=null, temaColor='#2c4a6e', temaText='#f4f0e6', temaTexture='diagonal', temaImage=null;
 function openTemaModal(id){
   editTemaId = id; const t = id?findTema(id):null;
   document.getElementById('temaModalTitle').textContent = t?'Editar tema':'Nuevo tema';
   document.getElementById('temaNameInput').value = t?t.title:'';
   temaColor = t?t.color:FAMILIES[6].s[2]; temaText = t?t.textColor:'#f4f0e6'; temaTexture = t?(t.texture||'diagonal'):'diagonal';
+  temaImage = t?(t.image||null):null;
+  updateTemaImgPreview();
   buildSwatches(document.getElementById('temaSwBg'), temaColor, c=>{ temaColor=c; refreshTemaTex(); });
   buildSwatches(document.getElementById('temaSwText'), temaText, c=>temaText=c);
   refreshTemaTex();
   document.getElementById('temaDeleteBtn').style.display = t?'inline-block':'none';
   document.getElementById('temaModal').classList.add('show');
 }
+function updateTemaImgPreview(){
+  const img = document.getElementById('temaImgPreview');
+  const clearBtn = document.getElementById('temaImgClearBtn');
+  if(temaImage){ img.src = temaImage; img.style.display='block'; clearBtn.style.display='inline-block'; }
+  else { img.style.display='none'; clearBtn.style.display='none'; }
+}
+document.getElementById('temaImgPickBtn').addEventListener('click', ()=> document.getElementById('temaImgInput').click());
+document.getElementById('temaImgInput').addEventListener('change', e=>{
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{ temaImage = reader.result; updateTemaImgPreview(); };
+  reader.readAsDataURL(file);
+});
+document.getElementById('temaImgClearBtn').addEventListener('click', ()=>{ temaImage=null; document.getElementById('temaImgInput').value=''; updateTemaImgPreview(); });
 function refreshTemaTex(){
   buildTexturePicker(document.getElementById('temaTexPicker'), temaTexture, temaColor, id=>temaTexture=id);
 }
 document.getElementById('temaCancel').addEventListener('click', ()=>document.getElementById('temaModal').classList.remove('show'));
 document.getElementById('temaSave').addEventListener('click', ()=>{
   const name = document.getElementById('temaNameInput').value.trim()||'Sin título';
-  if(editTemaId){ const t=findTema(editTemaId); t.title=name; t.color=temaColor; t.textColor=temaText; t.texture=temaTexture; }
-  else { const t={id:uid(),title:name,color:temaColor,textColor:temaText,texture:temaTexture,subtemas:[]}; data.temas.push(t); currentTemaId=t.id; }
+  if(editTemaId){ const t=findTema(editTemaId); t.title=name; t.color=temaColor; t.textColor=temaText; t.texture=temaTexture; t.image=temaImage; }
+  else { const t={id:uid(),title:name,color:temaColor,textColor:temaText,texture:temaTexture,image:temaImage,subtemas:[]}; data.temas.push(t); currentTemaId=t.id; }
+  saveData();
   document.getElementById('temaModal').classList.remove('show');
   if(document.getElementById('view-table').classList.contains('active')) renderTable(); else renderHome();
 });
@@ -705,6 +846,7 @@ document.getElementById('subtemaSave').addEventListener('click', ()=>{
   const t = findTema(editSubtemaTemaId);
   if(editSubtemaId){ const s=findSubtema(t,editSubtemaId); s.title=name; s.color=subColor; s.textColor=subText; s.texture=subTexture; }
   else { t.subtemas.push({id:uid(),title:name,color:subColor,textColor:subText,texture:subTexture,terminos:[]}); }
+  saveData();
   document.getElementById('subtemaModal').classList.remove('show'); renderTable();
 });
 document.getElementById('subtemaDeleteBtn').addEventListener('click', ()=>{ document.getElementById('subtemaModal').classList.remove('show'); openConfirm('subtema', editSubtemaId, 'Eliminar subtema', 'Se eliminará con sus términos.', editSubtemaTemaId); });
@@ -712,8 +854,8 @@ document.getElementById('subtemaDeleteBtn').addEventListener('click', ()=>{ docu
 /* ROW COLOR */
 function openRowColorModal(id){
   const term = getTerm(id);
-  buildSwatches(document.getElementById('rowSwBg'), term.color, c=>{ term.color=c; renderTable(); openRowColorModal(id); });
-  buildSwatches(document.getElementById('rowSwText'), term.textColor, c=>{ term.textColor=c; renderTable(); openRowColorModal(id); });
+  buildSwatches(document.getElementById('rowSwBg'), term.color, c=>{ term.color=c; saveData(); renderTable(); openRowColorModal(id); });
+  buildSwatches(document.getElementById('rowSwText'), term.textColor, c=>{ term.textColor=c; saveData(); renderTable(); openRowColorModal(id); });
   document.getElementById('rowColorModal').classList.add('show');
 }
 document.getElementById('rowColorClose').addEventListener('click', ()=>document.getElementById('rowColorModal').classList.remove('show'));
@@ -731,6 +873,7 @@ document.getElementById('confirmOk').addEventListener('click', ()=>{
     if(pendingDelete.type==='tema'){ data.temas = data.temas.filter(t=>t.id!==pendingDelete.id); if(currentTemaId===pendingDelete.id) currentTemaId=null; }
     else if(pendingDelete.type==='subtema'){ const t=findTema(pendingDelete.extra); t.subtemas=t.subtemas.filter(s=>s.id!==pendingDelete.id); }
     else if(pendingDelete.type==='term'){ for(const t of data.temas) for(const s of t.subtemas) s.terminos=s.terminos.filter(x=>x.id!==pendingDelete.id); }
+    saveData();
   }
   pendingDelete=null;
   document.getElementById('confirmModal').classList.remove('show');
@@ -740,7 +883,7 @@ document.getElementById('confirmOk').addEventListener('click', ()=>{
 document.getElementById('dataBtn').addEventListener('click', ()=>document.getElementById('dataModal').classList.add('show'));
 document.getElementById('dataClose').addEventListener('click', ()=>document.getElementById('dataModal').classList.remove('show'));
 
-seed();
+loadData();
 renderHome();
 
 if('serviceWorker' in navigator){
@@ -748,4 +891,4 @@ if('serviceWorker' in navigator){
 }
 </script>
 </body>
-  </html>
+      </html>
