@@ -1,4 +1,4 @@
-const CACHE_NAME = 'glosa-v3';
+const CACHE_NAME = 'glosa-v4';
 const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -22,4 +22,3 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request).then((cached) => cached || fetch(event.request))
   );
 });
-
